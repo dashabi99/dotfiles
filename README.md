@@ -13,6 +13,10 @@
 6. 在根目录下的点文件
     - 例如：`mv ~/.tmux.conf ~/dotfiles/tmux/`
     - `ln -s ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf`
+7. 在windows上链接文件
+    - 使用powershell，不管用的话就使用管理员模式打开powershell
+        - 例如目录：`New-Item -ItemType SymbolicLink -Path "C:\Users\<YourUsername>\AppData\Local\nvim" -Target "C:\Users\<YourUsername>\dotfiles\nvim"`
+        - 例如文件：`New-Item -ItemType SymbolicLink -Path "C:\Users\<YourUsername>\.config\wezterm\wezterm.lua" -Target "C:\Users\<YourUsername>\dotfiles\wezterm\wezterm.lua"`
 
 ## 二、把本地的dotfiles目录上传到github --第一次初始化
 
