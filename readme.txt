@@ -11,11 +11,13 @@
         例如：mv ~/.tmux.conf ~/dotfiles/tmux/
             ln -s ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
 
-二:把本地的dotfiles目录上传到github面
+二:把本地的dotfiles目录上传到github --第一次初始化
     cd ~/dotfiles  
     初始化git仓库，并重命名为main
         2:git init
-        git branch -m main 
+        git branch -m main
+    在github上创建一个仓库
+        注意：千万不要添加readme.md文件，否则会报错。可以自己在本地写一个readme.md文件，然后上传
     使用sshkey验证登录
         win：
             # 使用 Git Bash 或 Windows Terminal
@@ -59,3 +61,29 @@
             git config user.name "Your Name"    
     推送本地仓库到 GitHub
         git push -u origin main
+
+三：后续更新仓库以及从仓库拉去代码
+    # 拉取远程最新代码
+        git pull origin main （推荐）
+
+        # 或者分步操作
+            git fetch origin    # 获取远程更新
+            git merge origin/main # 合并到本地
+    # 推送本地代码到远程仓库
+        添加文件
+            # 添加所有修改的文件
+                git add .
+            # 或添加特定文件
+                git add filename.txt
+            # 或交互式添加
+                git add -i
+    # 提交文件
+        # 提交并添加提交信息
+            git commit -m "描述你的修改内容"
+            # 或进入编辑器写详细提交信息
+                git commit
+    # 推送到远程仓库
+        git push origin main
+
+        # 第一次推送可能需要设置上游分支
+            git push -u origin main
