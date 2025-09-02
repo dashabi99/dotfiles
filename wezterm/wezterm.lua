@@ -193,6 +193,7 @@ local ICONS = {
 	SCP = utf8.char(0xeaf4),
 	-- CLAUDE = utf8.char(0xeac4),
 	-- CLAUDE = utf8.char(0xf121), -- AI/coding icon
+	GIT = utf8.char(0xf1d3),
 }
 
 -- 索引符号
@@ -263,6 +264,7 @@ local function get_process_icon(exec_name, full_process_name)
 		yazi = ICONS.YAZI .. " yazi",
 		scp = ICONS.SCP .. " scp",
 		-- claude = ICONS.CLAUDE .. " coding",
+		git = ICONS.GIT,
 	}
 
 	-- 直接匹配
