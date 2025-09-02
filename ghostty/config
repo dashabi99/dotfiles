@@ -1,0 +1,50 @@
+#字体
+font-family = "JetBrainsMono NF Bold"
+#主题
+theme = "catppuccin-latte"
+#使标题框和主题一个颜色 gtk主题为Adwaita时生效
+window-theme = ghostty
+#允许从系统剪切板 读内容
+clipboard-read = allow
+#允许从系统剪切板 写内容
+clipboard-write = allow
+#选中文本时不复制内容
+copy-on-select = false
+#去掉复制内容结尾的空格
+clipboard-trim-trailing-spaces = true
+#窗口的字体
+window-title-font-family = "Adwaita Sans"
+#粗体文本使用明亮调色板
+bold-is-bright = true
+#输入时隐藏光标
+mouse-hide-while-typing = true
+#设置光标样式为方块
+shell-integration-features = no-cursor
+cursor-style = block
+
+#显示终端上的url链接，需要按下ctrl键才会显示
+link-url = true
+#界面回滚内容多少
+# scrollback-limit = 10000
+#新打开的窗口或者标签页不继承之前的工作目录
+window-inherit-working-directory = false
+#新打开的窗口或者标签页不继承之前的字体大小
+window-inherit-font-size = false
+#新建标签页在标签列表最后添加
+window-new-tab-position = end
+#显示完整的gtk标题栏
+gtk-titlebar = true
+#打开滚动条 暂时没这个功能
+
+#修改一些默认的按键绑定
+keybind = ctrl+1=goto_tab:1
+keybind = ctrl+2=goto_tab:2
+keybind = ctrl+3=goto_tab:3
+keybind = ctrl+4=goto_tab:4
+keybind = ctrl+5=goto_tab:5
+keybind = ctrl+6=goto_tab:6
+keybind = ctrl+7=goto_tab:7
+keybind = ctrl+8=goto_tab:8
+
+keybind = ctrl+q=close_tab
+keybind = ctrl+t=new_tab
