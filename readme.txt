@@ -16,31 +16,16 @@
     初始化git仓库，并重命名为main
         2:git init
         git branch -m main 
-    把本地仓库与 GitHub 上的仓库链接
-        git remote add origin https://github.com/<USERNAME>/<REPO>.git
-        例如：git remote add origin https://github.com/dashabi99/dotfiles.git
-    将所有文件添加到 Git，然后提交更改
-        2:git add .
-        3:git commit -m "first commit"
-    提示输入邮箱和用户名（我选择的github的邮箱和名字）
-        这个是全局配置用户身份信息
-            git config --global user.email "you@example.com"
-            git config --global user.name "Your Name"
-        这个是仅为当前仓库设置用户身份信息
-            git config user.email "you@example.com"
-            git config user.name "Your Name"
     使用sshkey验证登录
         win：
             # 使用 Git Bash 或 Windows Terminal
             ssh-keygen -t ed25519 -C "your-email@example.com-windows"
             # 密钥会保存在 C:\Users\YourName\.ssh\
-
             # 查看公钥
             cat ~/.ssh/id_ed25519.pub
         linux：
             ssh-keygen -t ed25519 -C "your-email@example.com-linux"
-            # 密钥会保存在 ~/.ssh/
-
+            # 密钥会保存在 ~/.ssh/目录下
             # 查看公钥
             cat ~/.ssh/id_ed25519.pub
         去github上添加sshkey
@@ -51,5 +36,26 @@
                 Key 2:  
                 Title: "Linux Server"
                 例如：Key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5... (Linux的公钥)
+    把本地仓库与 GitHub 上的仓库链接
+        使用token：
+            git remote add origin https://github.com/<USERNAME>/<REPO>.git
+        使用sshkey：
+            git remote add origin git@github.com:<USERNAME>/<REPO>.git
+            如果一开始用了token的仓库连接
+                git remote set-url origin git@github.com:dashabi99/dotfiles.git
+                可以用这个改
+                # 验证修改
+                    git remote -v
+        例如：git remote add origin https://github.com/dashabi99/dotfiles.git
+    将所有文件添加到 Git，然后提交更改
+        2:git add .
+        3:git commit -m "first commit"
+    提示输入邮箱和用户名（我选择的github的邮箱和名字）
+        这个是全局配置用户身份信息
+            git config --global user.email "you@example.com"
+            git config --global user.name "Your Name"
+        这个是仅为当前仓库设置用户身份信息
+            git config user.email "you@example.com"
+            git config user.name "Your Name"    
     推送本地仓库到 GitHub
         git push -u origin main
