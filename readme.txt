@@ -83,7 +83,16 @@
             # 或进入编辑器写详细提交信息
                 git commit
     # 推送到远程仓库
-        git push origin main
+        git push origin main或者git push也可以
 
         # 第一次推送可能需要设置上游分支
             git push -u origin main
+四：git常用命令
+    # 查看所有分支（包括远程跟踪分支）
+        git branch -a
+    # 比较本地 main 和远程 main 的差异
+        git diff main origin/main
+    # 当前未提交的文件
+        git status -v
+    # 显示每次提交的commit
+        git log --oneline --graph --all
