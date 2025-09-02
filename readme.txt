@@ -29,6 +29,27 @@
         这个是仅为当前仓库设置用户身份信息
             git config user.email "you@example.com"
             git config user.name "Your Name"
+    使用sshkey验证登录
+        win：
+            # 使用 Git Bash 或 Windows Terminal
+            ssh-keygen -t ed25519 -C "your-email@example.com-windows"
+            # 密钥会保存在 C:\Users\YourName\.ssh\
+
+            # 查看公钥
+            cat ~/.ssh/id_ed25519.pub
+        linux：
+            ssh-keygen -t ed25519 -C "your-email@example.com-linux"
+            # 密钥会保存在 ~/.ssh/
+
+            # 查看公钥
+            cat ~/.ssh/id_ed25519.pub
+        去github上添加sshkey
+            GitHub -> Settings -> SSH and GPG keys -> New SSH key
+                Key 1:
+                Title: "Windows PC"
+                例如：Key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5... (Windows的公钥)
+                Key 2:  
+                Title: "Linux Server"
+                例如：Key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5... (Linux的公钥)
     推送本地仓库到 GitHub
         git push -u origin main
-    
