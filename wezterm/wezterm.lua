@@ -41,8 +41,9 @@ config.colors.background = "#111111"
 -- ============================================================================
 -- 窗口外观配置
 -- ============================================================================
--- 窗口装饰
+-- 窗口装饰 -- 看自己喜欢设置
 config.window_decorations = "TITLE | RESIZE"
+-- config.window_decorations = "TITLE | RESIZE"
 -- 不要标题栏，可以改成"RESIZE",想要标题栏和边框，可以改成"INTEGRATED_BUTTONS | RESIZE"
 -- 如果你设置的是INTEGRATED_BUTTONS | RESIZE，就把下面这些全部打开
 -- config.integrated_title_button_alignment = "Right"
@@ -59,7 +60,6 @@ config.show_tab_index_in_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = false
 -- 标签页最大宽度，默认16
 config.tab_max_width = 30
-
 -- 窗口填充和样式，右边给多一点，因为有滚动条
 config.window_padding = {
 	left = 8,
@@ -77,16 +77,17 @@ config.hide_mouse_cursor_when_typing = true
 -- 设置滚动行数
 config.scrollback_lines = 10000
 
--- 渲染设置-gpu
+-- 渲染设置-gpu -- (OpenGL可能稳定一点)
 -- config.front_end = "OpenGL"
 config.front_end = "WebGpu"
 config.webgpu_power_preference = "HighPerformance"
 config.webgpu_force_fallback_adapter = false
 
 --添加动画fps,以及光标设置
-config.animation_fps = 60
+config.animation_fps = 120
 config.max_fps = 120
-config.enable_kitty_keyboard = true -- 启用更快的键盘协议
+-- 启动kitty键盘协议，linux运行正常，在win上导致在wezterm里运行vim/nvim时，esc没反应和打一个中文字没反应，多个字正常.还是禁用吧也没快多少
+-- config.enable_kitty_keyboard = true -- 启用更快的键盘协议
 
 -- 设置默认工作区名称为"Normal"
 config.default_workspace = "Normal"
@@ -110,19 +111,6 @@ config.initial_cols = 120 -- 增加列数
 config.initial_rows = 35 -- 增加行数
 
 -- ============================================================================
--- 平台特定配置
--- ============================================================================
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-	config.default_prog = { "pwsh", "-NoLogo" }
-elseif wezterm.target_triple:match("apple") then
-	config.default_prog = { "zsh", "-l" }
-	-- macOS 特定设置
-	config.macos_window_background_blur = 20
-else
-	config.default_prog = { "zsh", "-l" }
-end
-
--- ============================================================================
 -- 启动菜单配置
 -- ============================================================================
 config.launch_menu = {
@@ -133,6 +121,7 @@ config.launch_menu = {
 	-- -- 添加本地会话选项
 	-- { label = "本地 Zsh", args = { "zsh", "-l" } },
 	-- { label = "本地 Bash", args = { "bash", "-l" } },
+	{ label = "PowerShell", args = { "pwsh", "-NoLogo" } },
 }
 
 -- ============================================================================
@@ -143,6 +132,11 @@ config.inactive_pane_hsb = {
 	saturation = 0.9,
 	brightness = 0.8,
 }
+
+-- 打开滚动条
+config.enable_scroll_bar = true
+-- 优化状态更新频率
+config.status_update_interval = 1000
 
 --背景透明度
 -- config.window_background_opacity = 0.9
@@ -158,45 +152,70 @@ config.inactive_pane_hsb = {
 --   }
 -- }
 
--- 打开滚动条
-config.enable_scroll_bar = true
--- 优化状态更新频率
-config.status_update_interval = 2000
+-- ============================================================================
+-- 检测登陆系统
+-- ============================================================================
+local function platform()
+	local function is_found(str, pattern)
+		return string.find(str, pattern) ~= nil
+	end
 
--- ============================================================================
--- 工具函数
--- ============================================================================
--- 提取目录最后一个名字
-local function basename(s)
-	return string.gsub(s, "(.*[/\\])(.*)", "%2")
+	return {
+		is_win = is_found(wezterm.target_triple, "windows"),
+		is_linux = is_found(wezterm.target_triple, "linux"),
+		is_mac = is_found(wezterm.target_triple, "apple"),
+	}
+end
+local os_info = platform()
+if os_info.is_win then
+	config.default_prog = { "pwsh", "-NoLogo" }
+elseif os_info.is_linux then
+	config.default_prog = { "zsh", "-l" }
+elseif os_info.is_mac then
+	config.default_prog = { "zsh", "-l" }
+	-- macOS 特定设置
+	-- config.macos_window_background_blur = 20
 end
 
--- 标题栏 图标定义
-local ICONS = {
-	-- 箭头图标
-	SOLID_LEFT_ARROW = utf8.char(0xe0ba),
-	SOLID_LEFT_MOST = utf8.char(0x2588),
-	SOLID_RIGHT_ARROW = utf8.char(0xe0bc),
+-- ====================================
+-- 定义多系统都需要的变量,避免重复
+-- ====================================
+-- 提取目录/路径最后一个名字(兼容win和linux识别)
+local function basename(s)
+	-- return string.gsub(s, "(.*[/\\])(.*)", "%2")
+	if not s or s == "" then
+		return ""
+	end
+	local result = string.gsub(tostring(s), "(.*[/\\])(.*)", "%2")
+	return result:gsub("%.exe$", ""):gsub("%.bat$", ""):gsub("%.cmd$", ""):lower()
+end
 
-	-- 进程图标
-	UNKNOWN = utf8.char(0xf0633),
-	CMD = utf8.char(0xebc4),
-	PS = utf8.char(0xe86c),
-	NVIM = utf8.char(0xf36f),
-	VIM = utf8.char(0xe7c5),
-	FZF = utf8.char(0xf021e),
-	PYTHON = utf8.char(0xe73c),
-	TMUX = utf8.char(0xebc8),
-	SSH = utf8.char(0xeb39),
-	ZSH = utf8.char(0xe760),
-	YAZI = utf8.char(0xf01e5),
-	SCP = utf8.char(0xeaf4),
-	-- CLAUDE = utf8.char(0xeac4),
-	-- CLAUDE = utf8.char(0xf121), -- AI/coding icon
-	GIT = utf8.char(0xf1d3),
-}
+-- ============================================================================
+-- 图标和符号定义
+-- ============================================================================
+-- 箭头图标
+local SOLID_LEFT_ARROW = utf8.char(0xe0ba)
+local SOLID_LEFT_MOST = utf8.char(0x2588)
+local SOLID_RIGHT_ARROW = utf8.char(0xe0bc)
 
--- 索引符号
+-- 进程图标
+local UNKNOWN = utf8.char(0xf0633)
+local ADMIN_WIN = utf8.char(0xf49c)
+local CMD = utf8.char(0xebc4)
+local PWSH = utf8.char(0xe86c)
+local NVIM = utf8.char(0xf36f)
+local VIM_WIN = utf8.char(0xe62b)
+local VIM_LINUX = utf8.char(0xe7c5)
+local FZF = utf8.char(0xf021e)
+local PYTHON = utf8.char(0xe73c)
+local TMUX = utf8.char(0xebc8)
+local SSH = utf8.char(0xeb39)
+local ZSH = utf8.char(0xe760)
+local YAZI = utf8.char(0xf01e5) -- 终端文件管理器yazi图标
+local SCP = utf8.char(0xeaf4) -- scp 的图标
+local CLAUDE = utf8.char(0xf121) -- claude code图标
+local ZOOM = "🔍" -- 放大镜图标
+local GIT = utf8.char(0xe702) -- git图标
 local SUP_IDX = {
 	"¹",
 	"²",
@@ -241,132 +260,90 @@ local SUB_IDX = {
 	"₁₉",
 	"₂₀",
 }
-
--- 进程图标映射函数（使用短名称）
-local function get_process_icon(exec_name, full_process_name)
-	-- 确保 exec_name 不为空
-	if not exec_name or exec_name == "" then
-		return ICONS.UNKNOWN .. " unknown"
-	end
-	-- 转换为小写进行匹配，提高匹配成功率
-	local exec_lower = exec_name:lower()
-
-	local icon_map = {
-		zsh = ICONS.ZSH .. " Zsh",
-		bash = ICONS.ZSH .. " Bash",
-		tmux = ICONS.TMUX .. " Tmux",
-		ssh = ICONS.SSH .. " ssh",
-		pwsh = ICONS.PS .. " pwsh",
-		powershell = ICONS.PS .. " pwsh",
-		cmd = ICONS.CMD .. " cmd",
-		python = ICONS.PYTHON .. " py",
-		python3 = ICONS.PYTHON .. " py3",
-		yazi = ICONS.YAZI .. " yazi",
-		scp = ICONS.SCP .. " scp",
-		-- claude = ICONS.CLAUDE .. " coding",
-		git = ICONS.GIT,
-	}
-
-	-- 直接匹配
-	-- if icon_map[exec_name] then
-	-- 	return icon_map[exec_name]
-	-- end
-	-- 直接匹配（小写）
-	if icon_map[exec_lower] then
-		return icon_map[exec_lower]
-	end
-
-	-- 模式匹配
-	local patterns = {
-		-- { "claude", ICONS.CLAUDE .. " Claude" }, -- 优先匹配 claude
-		{ "nvim", ICONS.NVIM .. " nvim" },
-		{ "vim", ICONS.VIM .. " vim" },
-		{ "fzf", ICONS.FZF .. " fzf" },
-		{ "python", ICONS.PYTHON .. " Python" },
-	}
-
-	for _, pattern in ipairs(patterns) do
-		if exec_lower:find(pattern[1], 1, true) then
-			return pattern[2]
-		end
-	end
-
-	-- 对未知进程使用短名称
-	-- local short_name = #exec_name > 8 and exec_name:sub(1, 8) .. "..." or exec_name
-	-- return ICONS.UNKNOWN .. " " .. short_name
-	local display_name = full_process_name or exec_name
-	-- 截断过长的路径，只保留最后两级目录和文件名
-	if display_name:find("/") then
-		local parts = {}
-		for part in display_name:gmatch("[^/]+") do
-			table.insert(parts, part)
-		end
-		if #parts > 2 then
-			display_name = ".../" .. parts[#parts - 1] .. "/" .. parts[#parts]
-		end
-	end
-
-	-- 如果名称仍然太长，进行截断
-	if #display_name > 20 then
-		display_name = display_name:sub(1, 17) .. "..."
-	end
-
-	return ICONS.UNKNOWN .. " " .. display_name
-end
-
--- ============================================================================
--- 标签页标题格式化
--- ============================================================================
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	local colors = {
-		edge_background = "#121212",
-		inactive = { bg = "#4E4E4E", fg = "#1C1B19", dim_fg = "#3A3A3A" },
-		active = { bg = "#FBB829", fg = "#1C1B19" },
-		hover = { bg = "#FF8700", fg = "#1C1B19" },
-	}
-
-	local background = colors.inactive.bg
-	local foreground = colors.inactive.fg
-	local dim_foreground = colors.inactive.dim_fg
+	local edge_background = "#121212"
+	local background = "#4E4E4E"
+	local foreground = "#1C1B19"
+	local dim_foreground = "#3A3A3A"
 
 	if tab.is_active then
-		background = colors.active.bg
-		foreground = colors.active.fg
+		background = "#FBB829"
+		foreground = "#1C1B19"
 	elseif hover then
-		background = colors.hover.bg
-		foreground = colors.hover.fg
+		background = "#FF8700"
+		foreground = "#1C1B19"
 	end
 
 	local edge_foreground = background
-	local process_name = tab.active_pane.foreground_process_name or ""
+	local process_name = tab.active_pane.foreground_process_name
+	local pane_title = tab.active_pane.title
 	local exec_name = basename(process_name):gsub("%.exe$", "")
-	-- 面板最大化标志 放大镜图标
-	local zoomed = tab.active_pane.is_zoomed and " 🔍 " or ""
+	local title_with_icon
 
-	-- local title_with_icon = get_process_icon(exec_name)
-	local title_with_icon = get_process_icon(exec_name, process_name)
-	local left_arrow = tab.tab_index == 0 and ICONS.SOLID_LEFT_MOST or ICONS.SOLID_LEFT_ARROW
-	local id = SUB_IDX[tab.tab_index + 1] or tostring(tab.tab_index + 1)
-	local pid = SUP_IDX[tab.active_pane.pane_index + 1] or tostring(tab.active_pane.pane_index + 1)
+	-- exec_name是从进程路径提取的短名称，pane_title是当前窗口标题,match是匹配,upper是转大写
+	-- 多种匹配方法
+	if exec_name == "zsh" or exec_name == "bash" then
+		title_with_icon = ZSH .. " " .. exec_name
+	elseif exec_name:match("nvim") then
+		title_with_icon = NVIM .. " nvim"
+	elseif exec_name:match("vim") then
+		title_with_icon = VIM_LINUX
+	elseif exec_name == "fzf" then
+		title_with_icon = FZF .. " " .. exec_name:upper()
+	elseif exec_name == "tmux" then
+		title_with_icon = TMUX .. " " .. exec_name
+	elseif exec_name:match("python") then
+		title_with_icon = PYTHON .. " " .. exec_name
+	elseif exec_name == "ssh" then
+		title_with_icon = SSH .. " " .. exec_name
+	elseif exec_name == "git" then
+		title_with_icon = GIT .. " " .. exec_name
+	elseif exec_name == "yazi" then
+		title_with_icon = YAZI .. " " .. exec_name
+	elseif exec_name == "scp" then
+		title_with_icon = SCP .. " " .. exec_name
+	elseif pane_title:match("claude") then
+		title_with_icon = CLAUDE .. " claude"
+	elseif os_info.is_win and exec_name == "pwsh" then
+		-- 检查是否在运行vim
+		if pane_title:match("VIM") then
+			title_with_icon = VIM_WIN .. " vim"
+		elseif pane_title:find("nvim") then
+			title_with_icon = NVIM .. " nvim"
+		elseif pane_title:match("^Administrator: ") then
+			title_with_icon = PWSH .. " PowerShell " .. ADMIN_WIN
+		elseif exec_name == "cmd" then
+			title_with_icon = CMD .. " cmd"
+		else
+			title_with_icon = PWSH .. " PowerShell"
+		end
+	else
+		title_with_icon = UNKNOWN .. " " .. exec_name
+	end
 
-	-- 给标题更多空间，减少预留空间
-	local available_width = math.max(max_width - 4, 12) -- 确保最小宽度
-	local title = " " .. wezterm.truncate_right(title_with_icon, available_width) .. " "
+	local left_arrow = SOLID_LEFT_ARROW
+	if tab.tab_index == 0 then
+		left_arrow = SOLID_LEFT_MOST
+	end
+	local id = SUB_IDX[tab.tab_index + 1]
+	local pid = SUP_IDX[tab.active_pane.pane_index + 1]
+	local title = " " .. wezterm.truncate_right(title_with_icon, max_width - 6) .. " "
 
 	return {
 		{ Attribute = { Intensity = "Bold" } },
-		{ Background = { Color = colors.edge_background } },
+		{ Background = { Color = edge_background } },
 		{ Foreground = { Color = edge_foreground } },
 		{ Text = left_arrow },
 		{ Background = { Color = background } },
 		{ Foreground = { Color = foreground } },
 		{ Text = id },
-		{ Text = title .. zoomed },
+		{ Text = title },
+		{ Text = tab.active_pane.is_zoomed and (" " .. ZOOM .. " ") or "" },
 		{ Foreground = { Color = dim_foreground } },
 		{ Text = pid },
-		{ Background = { Color = colors.edge_background } },
+		{ Background = { Color = edge_background } },
 		{ Foreground = { Color = edge_foreground } },
-		{ Text = ICONS.SOLID_RIGHT_ARROW },
+		{ Text = SOLID_RIGHT_ARROW },
 		{ Attribute = { Intensity = "Normal" } },
 	}
 end)
@@ -394,13 +371,14 @@ wezterm.on("update-status", function(window, pane)
 	local cwd = pane:get_current_working_dir()
 	local cwd_text = ""
 
-	if cmd == "ssh" then
+	if cmd:find("ssh") then
 		cwd_text = "🌐 Remote"
-	elseif cmd == "tmux" then
+	elseif cmd:find("tmux") then
 		cwd_text = "🔧 Tmux"
 	elseif cwd then
 		if type(cwd) == "userdata" then
-			cwd_text = basename(cwd.file_path)
+			local file_path = cwd.file_path or cwd.path or ""
+			cwd_text = basename(file_path)
 		else
 			cwd_text = basename(cwd)
 		end
@@ -488,7 +466,7 @@ end)
 -- ============================================================================
 -- 键盘绑定
 -- ============================================================================
-config.leader = { key = "b", mods = "ALT", timeout_milliseconds = 3000 }
+config.leader = { key = "b", mods = "ALT", timeout_milliseconds = 3000 } -- 设置快捷键前缀
 config.keys = {
 	-- 一次性退出全部窗口
 	{ key = "q", mods = "LEADER", action = act.QuitApplication },
@@ -530,7 +508,10 @@ config.keys = {
 				window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
 			else
 				window:perform_action(wezterm.action({ CopyTo = "ClipboardAndPrimarySelection" }), pane)
-				window:perform_action(wezterm.action.ClearSelection, pane)
+				-- 当复制完后一点时间自己清除选中内容
+				wezterm.time.call_after(0.01, function()
+					window:perform_action(wezterm.action.ClearSelection, pane)
+				end)
 			end
 		end),
 	},
