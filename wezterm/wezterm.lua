@@ -199,11 +199,11 @@ local SOLID_LEFT_MOST = utf8.char(0x2588)
 local SOLID_RIGHT_ARROW = utf8.char(0xe0bc)
 
 -- 进程图标
-local UNKNOWN = utf8.char(0xf0633)
+local UNKNOWN = utf8.char(0xebc3)
 local ADMIN_WIN = utf8.char(0xf49c)
 local CMD = utf8.char(0xebc4)
 local PWSH = utf8.char(0xe86c)
-local NVIM = utf8.char(0xf36f)
+local NVIM = utf8.char(0xe6ae)
 local VIM_WIN = utf8.char(0xe62b)
 local VIM_LINUX = utf8.char(0xe7c5)
 local FZF = utf8.char(0xf021e)
@@ -212,8 +212,8 @@ local TMUX = utf8.char(0xebc8)
 local SSH = utf8.char(0xeb39)
 local ZSH = utf8.char(0xe760)
 local YAZI = utf8.char(0xf01e5) -- 终端文件管理器yazi图标
-local SCP = utf8.char(0xeaf4) -- scp 的图标
-local CLAUDE = utf8.char(0xf121) -- claude code图标
+local SCP = utf8.char(0xf09e) -- scp 的图标
+local CLAUDE = utf8.char(0xf0a1e) -- claude code图标
 local ZOOM = "🔍" -- 放大镜图标
 local GIT = utf8.char(0xe702) -- git图标
 local SUP_IDX = {
@@ -318,7 +318,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 			title_with_icon = PWSH .. " PowerShell"
 		end
 	else
-		title_with_icon = UNKNOWN .. " " .. exec_name
+		title_with_icon = UNKNOWN .. " " .. pane_title
 	end
 
 	local left_arrow = SOLID_LEFT_ARROW
