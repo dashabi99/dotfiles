@@ -19,8 +19,8 @@ ZSH_THEME="robbyrussell"
 # 按tab,区分连字符(比如-和_)
 # HYPHEN_INSENSITIVE="true"
 
-# 命令拼写错误时,提示是否要校正
-ENABLE_CORRECTION="true"
+# 命令拼写错误时,提示是否要校正(有点频繁了，给关掉)
+# ENABLE_CORRECTION="true"
 
 # 如果在终端中粘贴 URL 或文本时出现问题，可以启用此选项来禁用某些魔术函数
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -138,10 +138,6 @@ alias ping='ping -c 5'
 # =====第三方工具配置=====
 # fzf_config (模糊查找工具)
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# FZF 配置
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
 # node.js (安装nvim的插件前要安装这个)
 export NVM_DIR="$HOME/.nvm"
