@@ -6,8 +6,9 @@ local act = wezterm.action
 -- ============================================================================
 -- 颜色和主题配置
 -- ============================================================================
--- -- 第一种方法
+-- -- 第一种方法(单独设置全局主题，没有光标及滚动条的颜色修改)
 -- config.color_scheme = "tokyonight_moon"
+-- config.color_scheme = "Ubuntu"
 
 -- 第二种方法
 config.colors = {
@@ -87,7 +88,8 @@ config.webgpu_force_fallback_adapter = false
 config.animation_fps = 120
 config.max_fps = 120
 -- 启动kitty键盘协议，linux运行正常，在win上导致在wezterm里运行vim/nvim时，esc没反应和打一个中文字没反应，多个字正常.还是禁用吧也没快多少
--- config.enable_kitty_keyboard = true -- 启用更快的键盘协议
+-- config.enable_kitty_keyboard = true
+config.term = "xterm-256color"
 
 -- 设置默认工作区名称为"Normal"
 config.default_workspace = "Normal"
@@ -98,6 +100,7 @@ config.default_workspace = "Normal"
 -- 当第一个字体没安装时，使用第二个字体
 config.font = wezterm.font_with_fallback({
 	{ family = "Maple Mono NF CN", weight = "Regular" },
+	{ family = "FiraCode Nerd Font", weight = "Regular" },
 	{ family = "JetBrains Mono", weight = "Medium" },
 	{ family = "UbuntuMono Nerd Font", weight = "Medium", scale = 1.35 },
 	"Noto Color Emoji",
@@ -153,8 +156,9 @@ config.status_update_interval = 1000
 -- }
 
 -- ============================================================================
--- 检测登陆系统
+-- 定义多系统都需要的变量,避免重复
 -- ============================================================================
+-- 检测登陆系统
 local function platform()
 	local function is_found(str, pattern)
 		return string.find(str, pattern) ~= nil
@@ -177,9 +181,6 @@ elseif os_info.is_mac then
 	-- config.macos_window_background_blur = 20
 end
 
--- ====================================
--- 定义多系统都需要的变量,避免重复
--- ====================================
 -- 提取目录/路径最后一个名字(兼容win和linux识别)
 local function basename(s)
 	-- return string.gsub(s, "(.*[/\\])(.*)", "%2")
@@ -260,6 +261,10 @@ local SUB_IDX = {
 	"₁₉",
 	"₂₀",
 }
+
+-- ============================================================================
+-- 标签页的图标和标题设置
+-- ============================================================================
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local edge_background = "#121212"
 	local background = "#4E4E4E"
@@ -303,20 +308,20 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	elseif exec_name == "scp" then
 		title_with_icon = SCP .. " " .. exec_name
 	elseif pane_title:match("claude") then
-		title_with_icon = CLAUDE .. " claude"
+		title_with_icon = CLAUDE .. " claude code"
 	elseif os_info.is_win and exec_name == "pwsh" then
 		-- 检查是否在运行vim
-		if pane_title:match("VIM") then
-			title_with_icon = VIM_WIN .. " vim"
-		elseif pane_title:find("nvim") then
+		if exec_name:find("nvim") then
 			title_with_icon = NVIM .. " nvim"
+		elseif pane_title:match("VIM") then
+			title_with_icon = VIM_WIN .. " vim"
 		elseif pane_title:match("^Administrator: ") then
 			title_with_icon = PWSH .. " PowerShell " .. ADMIN_WIN
-		elseif exec_name == "cmd" then
-			title_with_icon = CMD .. " cmd"
 		else
 			title_with_icon = PWSH .. " PowerShell"
 		end
+	elseif exec_name == "cmd" then
+		title_with_icon = CMD .. " " .. exec_name
 	else
 		title_with_icon = UNKNOWN .. " " .. pane_title
 	end
@@ -557,7 +562,7 @@ config.keys = {
 	},
 }
 
--- 数字键切换标签页 (1-9)
+-- CTRL+数字键切换标签页 (1-9)
 for i = 1, 9 do
 	table.insert(config.keys, {
 		key = tostring(i),
