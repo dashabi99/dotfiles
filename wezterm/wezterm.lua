@@ -183,12 +183,7 @@ end
 
 -- 提取目录/路径最后一个名字(兼容win和linux识别)
 local function basename(s)
-	-- return string.gsub(s, "(.*[/\\])(.*)", "%2")
-	if not s or s == "" then
-		return ""
-	end
-	local result = string.gsub(tostring(s), "(.*[/\\])(.*)", "%2")
-	return result:gsub("%.exe$", ""):gsub("%.bat$", ""):gsub("%.cmd$", ""):lower()
+	return string.gsub(s, "(.*[/\\])(.*)", "%2")
 end
 
 -- ============================================================================
