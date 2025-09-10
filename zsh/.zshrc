@@ -1,52 +1,19 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
+# ==========oh-my-zsh配置==========
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
 # =====主题配置=====
-# Set name of the theme to load --- if set to "random" 随机主题
-ZSH_THEME="robbyrussell"
-# ZSH_THEME="powerlevel10k/powerlevel10k"  # 推荐更强大的主题
+# "random" 随机主题
+# ZSH_THEME="robbyrussell"  -- 使用下面的starship主题就把这个注释掉
 # ZSH_THEME="essembeh"
 # ZSH_THEME="lukerandall"
 # ZSH_THEME="maran"
-
-# =====基础配置=====
-# 按tab,区分大小写
-# CASE_SENSITIVE="true"
-
-# 按tab,区分连字符(比如-和_)
-# HYPHEN_INSENSITIVE="true"
-
-# 命令拼写错误时,提示是否要校正(有点频繁了，给关掉)
-# ENABLE_CORRECTION="true"
-
-# 如果在终端中粘贴 URL 或文本时出现问题，可以启用此选项来禁用某些魔术函数
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# 显示命令执行时间（如果命令执行超过指定秒数）
-HIST_STAMPS="yyyy-mm-dd"
-
 # =====更新配置=====
 # 自动更新行为
 zstyle ':omz:update' mode reminder  # 提醒用户更新
 # zstyle ':omz:update' mode auto      # 自动更新不询问
 # zstyle ':omz:update' mode disabled  # 禁用自动更新
-
 # 自动更新频率(按照天为单位)
 zstyle ':omz:update' frequency 7
-
-# =====历史记录配置=====
-HISTSIZE=10000
-SAVEHIST=10000
-setopt HIST_IGNORE_DUPS          # 不记录重复命令
-setopt HIST_IGNORE_ALL_DUPS      # 删除旧的重复命令
-setopt HIST_SAVE_NO_DUPS         # 不保存重复命令
-setopt HIST_FIND_NO_DUPS         # 查找时不显示重复
-setopt HIST_IGNORE_SPACE         # 忽略以空格开头的命令
-setopt SHARE_HISTORY             # 多个终端共享历史
-
 # =====插件配置=====
 # 插件位于 $ZSH/plugins/ 和 $ZSH_CUSTOM/plugins/ 中
 plugins=(
@@ -66,11 +33,44 @@ plugins=(
     # docker                    # Docker 补全（如果你用 Docker）
     # docker-compose            # Docker Compose 补全
 )
-
 # 自定义插件目录
 # ZSH_CUSTOM=/path/to/new-custom-folder
-
 source $ZSH/oh-my-zsh.sh
+
+# ==========starship配置==========
+eval "$(starship init zsh)"
+
+# =====如果想手动加载插件=====
+# #git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+# source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# # git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# =====基础配置=====
+# 按tab,区分大小写
+# CASE_SENSITIVE="true"
+
+# 按tab,区分连字符(比如-和_)
+# HYPHEN_INSENSITIVE="true"
+
+# 命令拼写错误时,提示是否要校正(有点频繁了，给关掉)
+# ENABLE_CORRECTION="true"
+
+# 如果在终端中粘贴 URL 或文本时出现问题，可以启用此选项来禁用某些魔术函数
+# DISABLE_MAGIC_FUNCTIONS="true"
+
+# 显示命令执行时间（如果命令执行超过指定秒数）
+HIST_STAMPS="yyyy-mm-dd"
+
+# =====历史记录配置=====
+HISTSIZE=10000
+SAVEHIST=10000
+setopt HIST_IGNORE_DUPS          # 不记录重复命令
+setopt HIST_IGNORE_ALL_DUPS      # 删除旧的重复命令
+setopt HIST_SAVE_NO_DUPS         # 不保存重复命令
+setopt HIST_FIND_NO_DUPS         # 查找时不显示重复
+setopt HIST_IGNORE_SPACE         # 忽略以空格开头的命令
+setopt SHARE_HISTORY             # 多个终端共享历史
 
 # =====环境变量=====
 # 编辑器配置
