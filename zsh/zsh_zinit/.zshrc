@@ -29,20 +29,36 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 #           atpull"%atclone" src"init.zsh"
 # zinit light starship/starship
 
-# 添加 zsh 插件 (按加载顺序优化)
-zinit ice blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
-# 加载 completions 以提升补全内容(暂时没感受到这个插件的提升)
+# 添加 zsh 插件 (按加载顺序优化)--方法一
+# zinit ice blockf atpull'zinit creinstall -q .'
+# zinit light zsh-users/zsh-completions
+# # 加载 completions 以提升补全内容(暂时没感受到这个插件的提升)
+# autoload -Uz compinit
+# compinit -C
+# zinit light zsh-users/zsh-autosuggestions
+# zinit light Aloxaf/fzf-tab
+# # zinit light zsh-users/zsh-syntax-highlighting
+# zinit light zdharma-continuum/fast-syntax-highlighting
+
+# 使用turbo来优化插件速度--方法二
+zinit wait lucid for \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+     zdharma-continuum/fast-syntax-highlighting \
+  blockf \
+     zsh-users/zsh-completions \
+  atload"!_zsh_autosuggest_start" \
+     zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
 autoload -Uz compinit
 compinit -C
-zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
-zinit light zsh-users/zsh-syntax-highlighting
 
-# 添加 OMZ 插件(用不上，还会导致时间变长)
+# 添加 OMZ 插件(git感觉用不上，还会导致时间变长)
 # zinit snippet OMZP::git
-# zinit snippet OMZP::sudo
-# zinit snippet OMZP::command-not-found
+zinit snippet OMZP::sudo
+zinit snippet OMZP::command-not-found
+# 这两个是把终端窗口显示的标题栏改成omz的样式 -> 为了让我设置的wezterm的图标能匹配上
+zinit snippet OMZ::lib/functions.zsh
+zinit snippet OMZ::lib/termsupport.zsh
 
 #######################################################
 # ZSH 基础选项
@@ -255,25 +271,9 @@ function backup() {
 }
 
 #######################################################
-# ZSH 语法高亮
+# ZSH 语法高亮，如果用fast语法高亮插件，这个就不用了
 #######################################################
-[[ -f ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh ]] && source ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh
-
-#######################################################
-# 自动设置终端标题
-#######################################################
-autoload -Uz add-zsh-hook
-
-# 在命令提示符准备好之前更新标题，只显示用户、主机名和路径
-function xterm_title_precmd () {
-    print -Pn -- '\e]2;%n@%m %~\a'
-}
-# 在命令执行前更新标题，显示完整的信息，包括分隔符 -->
-function xterm_title_preexec () {
-    print -Pn -- '\e]2;%n@%m %~ --> ' && print -n -- "${(q)1}\a"
-}
-add-zsh-hook precmd xterm_title_precmd
-add-zsh-hook preexec xterm_title_preexec
+# [[ -f ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh ]] && source ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh
 
 #######################################################
 # 个人配置
