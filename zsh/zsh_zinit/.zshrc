@@ -21,11 +21,20 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### zinit初始化结束
 
-# # 添加 Powerlevel10k 主题
+# 添加 Powerlevel10k 主题
 zinit ice depth=1; zinit light romkatv/powerlevel10k
+# 添加 starship 主题
+# zinit ice as"command" from"gh-r" \
+#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+#           atpull"%atclone" src"init.zsh"
+# zinit light starship/starship
 
 # 添加 zsh 插件 (按加载顺序优化)
+zinit ice blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
+# 加载 completions 以提升补全内容(暂时没感受到这个插件的提升)
+autoload -Uz compinit
+compinit -C
 zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light zsh-users/zsh-syntax-highlighting
