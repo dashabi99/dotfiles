@@ -1,0 +1,347 @@
+# ~/.zshrc - 优化版本，目标启动时间 < 300ms
+
+# =============================================================================
+# P10K INSTANT PROMPT (必须在最顶部)
+# =============================================================================
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# =============================================================================
+# ZINIT 初始化
+# =============================================================================
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+# =============================================================================
+# 基础 ZSH 设置
+# =============================================================================
+# 历史记录设置
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# ZSH 选项设置
+setopt autocd                   # 直接输入目录名即可进入
+setopt interactivecomments      # 允许交互式注释
+setopt magicequalsubst          # 启用文件名展开
+setopt nonomatch               # 如果没有匹配，不报错
+setopt notify                  # 立即报告作业状态变化
+setopt numericglobsort         # 数字排序
+setopt promptsubst             # 提示符变量替换
+
+# 历史记录优化选项
+setopt HIST_IGNORE_DUPS        # 忽略重复命令
+setopt HIST_IGNORE_ALL_DUPS    # 删除旧的重复命令
+setopt HIST_SAVE_NO_DUPS       # 保存时不保存重复
+setopt HIST_FIND_NO_DUPS       # 查找时忽略重复
+setopt HIST_IGNORE_SPACE       # 忽略以空格开头的命令
+setopt SHARE_HISTORY           # 共享历史记录
+setopt INC_APPEND_HISTORY      # 立即追加到历史文件
+
+# =============================================================================
+# 环境变量
+# =============================================================================
+export EDITOR=nvim
+export VISUAL=nvim  
+export SUDO_EDITOR=nvim
+export FCEDIT=nvim
+
+# 终端设置
+[[ "$TERM" == "xterm" ]] && export TERM=xterm-256color
+
+# 语言设置
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# PATH 优化
+typeset -U path PATH
+path=(
+    $HOME/.local/bin
+    $HOME/bin  
+    /usr/local/bin
+    /usr/bin
+    /bin
+    /usr/sbin
+    /sbin
+    $path
+)
+export PATH
+
+# =============================================================================
+# 快速补全系统初始化
+# =============================================================================
+autoload -Uz compinit
+
+# 优化的补全初始化 - 每24小时检查一次
+if [[ $HOME/.zcompdump(#qNmh+24) ]]; then
+  compinit -d $HOME/.zcompdump
+else
+  compinit -C -d $HOME/.zcompdump
+fi
+
+# 编译补全dump文件以提升性能
+if [[ -s "$HOME/.zcompdump" && (! -s "$HOME/.zcompdump.zwc" || "$HOME/.zcompdump" -nt "$HOME/.zcompdump.zwc") ]]; then
+  zcompile "$HOME/.zcompdump"
+fi
+
+# 补全样式设置
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' squeeze-slashes true
+
+# =============================================================================
+# ZINIT 插件加载 - 使用 TURBO 模式优化性能
+# =============================================================================
+
+# 立即加载：主题（P10K）
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+# Turbo 模式：基础插件
+zinit wait lucid for \
+    OMZP::git \
+    OMZP::sudo \
+    OMZP::command-not-found \
+    OMZP::colored-man-pages
+
+# Turbo 模式：补全插件
+zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+    zsh-users/zsh-completions
+
+# Turbo 模式：交互增强插件  
+zinit wait lucid for \
+    Aloxaf/fzf-tab \
+    atload"_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions
+
+# Turbo 模式：语法高亮（必须最后加载）
+zinit wait lucid atinit"zpcompinit; zpcdreplay" for \
+    zsh-users/zsh-syntax-highlighting
+
+# =============================================================================
+# 延迟加载：NVM (Node Version Manager)
+# =============================================================================
+export NVM_DIR="$HOME/.nvm"
+
+# NVM 延迟加载函数
+_load_nvm() {
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
+
+# 创建延迟加载的包装函数
+nvm() {
+    unset -f nvm node npm npx
+    _load_nvm
+    nvm "$@"
+}
+
+node() {
+    unset -f nvm node npm npx  
+    _load_nvm
+    node "$@"
+}
+
+npm() {
+    unset -f nvm node npm npx
+    _load_nvm
+    npm "$@"
+}
+
+npx() {
+    unset -f nvm node npm npx
+    _load_nvm
+    npx "$@"
+}
+
+# =============================================================================
+# 延迟加载：FZF
+# =============================================================================
+if [[ -f ~/.fzf.zsh ]]; then
+    zinit wait lucid for \
+        atload'source ~/.fzf.zsh' \
+        zdharma-continuum/null
+fi
+
+# FZF 配置
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --inline-info'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+
+# =============================================================================
+# 别名定义
+# =============================================================================
+# 基础别名
+alias ll='ls -alF'
+alias la='ls -A' 
+alias l='ls -CF'
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# 目录操作
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+# Git 别名
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+
+# 系统别名
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias ps='ps auxf'
+alias mkdir='mkdir -pv'
+alias wget='wget -c'
+
+# 编辑器别名
+alias v='nvim'
+alias vim='nvim'
+alias vi='nvim'
+
+# 网络工具
+alias ping='ping -c 5'
+alias ports='netstat -tulanp'
+
+# =============================================================================
+# 自定义函数
+# =============================================================================
+
+# 创建目录并进入
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# 提取各种压缩文件
+extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# 查找文件
+ff() {
+    find . -name "*$1*" -type f
+}
+
+# 查找目录
+fd() {
+    find . -name "*$1*" -type d
+}
+
+# 快速搜索历史
+h() {
+    if [ -z "$1" ]; then
+        history
+    else
+        history | grep "$1"
+    fi
+}
+
+# =============================================================================
+# 终端标题设置（解决Claude显示问题）
+# =============================================================================
+function set_terminal_title() {
+    case $TERM in
+        xterm*|rxvt*|Eterm|aterm|kterm|gnome*|alacritty|kitty*)
+            print -Pn "\e]0;${1:-$PWD}\a"
+            ;;
+        screen*|tmux*)
+            print -Pn "\e]0;${1:-$PWD}\a"
+            ;;
+    esac
+}
+
+function preexec() {
+    local cmd_name=${1%% *}
+    set_terminal_title "$cmd_name"
+}
+
+function precmd() {
+    set_terminal_title "zsh"
+}
+
+# =============================================================================
+# 按键绑定
+# =============================================================================
+# Emacs 风格按键绑定
+bindkey -e
+
+# 历史搜索
+bindkey '^R' history-incremental-search-backward
+bindkey '^S' history-incremental-search-forward
+
+# 行编辑
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^K' kill-line
+bindkey '^U' kill-whole-line
+bindkey '^W' backward-kill-word
+bindkey '^Y' yank
+
+# 目录导航
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
+# =============================================================================
+# 条件加载的配置
+# =============================================================================
+
+# 如果存在 ~/.zshrc.local，则加载本地配置
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# 如果存在项目特定的 .envrc，则加载（需要 direnv）
+if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
+
+# =============================================================================
+# P10K 配置（必须在最后）
+# =============================================================================
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# =============================================================================
+# 性能调试（可选，用于测试时启用）
+# =============================================================================
+# 取消注释以下行来启用性能分析
+zmodload zsh/zprof
+# 在命令行运行 `zprof` 来查看性能报告
+
+# =============================================================================
+# 结束标记
+# =============================================================================
+# 如果需要，可以在这里添加启动完成的提示
+# echo "ZSH loaded in $(($SECONDS * 1000))ms"
