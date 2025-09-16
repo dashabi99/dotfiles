@@ -1,40 +1,28 @@
 # 参考配置：https://github.com/codeopshq/dotfiles
 
 # 使用P10k就把starship注释掉
-# # 启用 Powerlevel10k 即时提示。应该保持在 ~/.zshrc 的顶部附近。
-# # 可能需要控制台输入的初始化代码（密码提示、[y/n] 确认等）必须放在此块之上；其他所有内容可以放在下面。
+# 启用 Powerlevel10k 即时提示。应该保持在 ~/.zshrc 的顶部附近。
+# 可能需要控制台输入的初始化代码（密码提示、[y/n] 确认等）必须放在此块之上；其他所有内容可以放在下面。
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# 设置我们想要存储 zinit 和插件的目录
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-
-# 如果 Zinit 还不存在，则下载它
-if [ ! -d "$ZINIT_HOME" ]; then
-   mkdir -p "$(dirname $ZINIT_HOME)"
-   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+### zinit初始化开始
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
-# 源码/加载 zinit
-source "${ZINIT_HOME}/zinit.zsh"
 
-# # 添加 Powerlevel10k
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### zinit初始化结束
+
+# # 添加 Powerlevel10k 主题
 zinit ice depth=1; zinit light romkatv/powerlevel10k
-
-# 加载补全系统
-autoload -Uz compinit && compinit
-# autoload -Uz compinit
-# # 只在必要时重新生成补全缓存（每天一次）
-# if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-#     compinit
-# else
-#     compinit -C
-# fi
-
-# 添加 OMZ 插件
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
-zinit snippet OMZP::command-not-found
 
 # 添加 zsh 插件 (按加载顺序优化)
 zinit light zsh-users/zsh-completions
@@ -42,27 +30,14 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 zinit light zsh-users/zsh-syntax-highlighting
 
-# 重新加载补全
-zinit cdreplay -q
-
-# # 要自定义提示符，请运行 `p10k configure` 或编辑 ~/.p10k.zsh。
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# 添加 OMZ 插件(用不上，还会导致时间变长)
+# zinit snippet OMZP::git
+# zinit snippet OMZP::sudo
+# zinit snippet OMZP::command-not-found
 
 #######################################################
 # ZSH 基础选项
 #######################################################
-# 按tab,区分大小写
-# CASE_SENSITIVE="true"
-
-# 按tab,区分连字符(比如-和_)
-# HYPHEN_INSENSITIVE="true"
-
-# 如果在终端中粘贴 URL 或文本时出现问题，可以启用此选项来禁用某些魔术函数
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# 显示命令执行时间（如果命令执行超过指定秒数）
-# HIST_STAMPS="yyyy-mm-dd"
-
 setopt autocd              # 只需输入目录名即可更改目录
 # setopt correct             # 自动纠正错误(有点频繁了，给关掉了)
 setopt interactivecomments # 在交互模式下允许注释
@@ -85,6 +60,7 @@ export FCEDIT=nvim
 # 设置终端类型支持 256 色
 [[ "$TERM" == "xterm" ]] && export TERM=xterm-256color
 
+# fzf 显示美化
 if [[ -x "$(command -v fzf)" ]]; then
 	export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
 	  --info=inline-right \
@@ -109,45 +85,24 @@ if [[ -x "$(command -v fzf)" ]]; then
 fi
 
 #######################################################
-# ZSH 键绑定
-#######################################################
-
-bindkey -v
-# bindkey '^p' history-search-backward
-# bindkey '^n' history-search-forward
-# bindkey '^[w' kill-region
-# bindkey ' ' magic-space                           # 在空格上进行历史扩展
-bindkey "^[[A" history-beginning-search-backward  # 使用上键搜索历史
-bindkey "^[[B" history-beginning-search-forward   # 使用下键搜索历史
-
-#######################################################
 # 历史记录配置
 #######################################################
-
 HISTSIZE=10000
-HISTFILE=~~/.zsh_history
+HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
-# HISTSIZE=10000
-# SAVEHIST=10000
-# setopt HIST_IGNORE_DUPS          # 不记录重复命令
-# setopt HIST_IGNORE_ALL_DUPS      # 删除旧的重复命令
-# setopt HIST_SAVE_NO_DUPS         # 不保存重复命令
-# setopt HIST_FIND_NO_DUPS         # 查找时不显示重复
-# setopt HIST_IGNORE_SPACE         # 忽略以空格开头的命令
-# setopt SHARE_HISTORY             # 多个终端共享历史
+HISTDUP=erase     # 删除旧的重复项
+setopt appendhistory    # 追加到历史文件，而不是覆盖
+setopt sharehistory     # 在多个终端会话之间共享历史记录
+setopt hist_ignore_space    # 忽略以空格开头的命令
+setopt hist_ignore_all_dups    # 忽略所有重复的命令
+setopt hist_save_no_dups        # 保存时忽略重复项
+setopt hist_ignore_dups     # 忽略连续重复的命令
+setopt hist_find_no_dups    # 在搜索历史时忽略重复项
+# setopt hist_reduce_blanks  # 将多个连续的空格缩减为一个
 
 #######################################################
 # 补全样式配置
 #######################################################
-
 # 大小写不敏感补全
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
@@ -162,8 +117,8 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Docker 补全优化
-# zstyle ':completion:*:*:docker:*' option-stacking yes
-# zstyle ':completion:*:*:docker-*:*' option-stacking yes
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 # 补全缓存
 zstyle ':completion:*' use-cache on
@@ -174,9 +129,42 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format '[%d]'
 
 #######################################################
+# 别名配置
+#######################################################
+# 基础别名
+# alias c='clear'
+# alias q='exit'
+alias ll='ls -lF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# 目录导航
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# 安全操作别名
+alias mkdir='mkdir -pv'
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -iv'
+
+# 颜色支持
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias ls='ls --color=auto'
+
+# 编辑器别名
+alias vi='nvim'
+# alias vim='nvim'
+alias v='nvim'
+alias ec='exec zsh'
+alias ti='time zsh -i -c exit'
+
+#######################################################
 # 将常用二进制目录添加到路径
 #######################################################
-
 # 如果目录存在且尚未在路径中，则将目录添加到路径末尾
 # 链接: https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
 function pathappend() {
@@ -211,51 +199,6 @@ function pathprepend() {
 # 路径的环境变量
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 pathprepend "$HOME/bin" "$HOME/sbin" "$HOME/.local/bin" "$HOME/local/bin" "$HOME/.bin"
-
-#######################################################
-# 别名配置
-#######################################################
-
-# 基础别名
-# alias c='clear'
-# alias q='exit'
-alias ll='ls -lF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# 目录导航
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-
-# 安全操作别名
-alias mkdir='mkdir -pv'
-alias cp='cp -iv'
-alias mv='mv -iv'
-alias rm='rm -iv'
-
-# 颜色支持
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias ls='ls --color=auto'
-
-# 编辑器别名
-alias vi='nvim'
-# alias vim='nvim'
-alias v='nvim'
-
-# FZF 的别名
-# 链接: https://github.com/junegunn/fzf
-if [[ -x "$(command -v fzf)" ]]; then
-    alias fzf='fzf --preview "bat --style=numbers --color=always --line-range :500 {}"'
-    # 模糊查找当前文件夹中的文件、预览并在编辑器中启动的别名
-	if [[ -x "$(command -v xdg-open)" ]]; then
-		alias preview='open $(fzf --info=inline --query="${@}")'
-	else
-		alias preview='edit $(fzf --info=inline --query="${@}")'
-	fi
-fi
 
 #######################################################
 # 函数
@@ -308,17 +251,57 @@ function backup() {
 [[ -f ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh ]] && source ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh
 
 #######################################################
-# Shell 集成
+# 自动设置终端标题
 #######################################################
+autoload -Uz add-zsh-hook
 
-# 设置 fzf 键绑定和模糊补全
+# 在命令提示符准备好之前更新标题，只显示用户、主机名和路径
+function xterm_title_precmd () {
+    print -Pn -- '\e]2;%n@%m %~\a'
+}
+# 在命令执行前更新标题，显示完整的信息，包括分隔符 -->
+function xterm_title_preexec () {
+    print -Pn -- '\e]2;%n@%m %~ --> ' && print -n -- "${(q)1}\a"
+}
+add-zsh-hook precmd xterm_title_precmd
+add-zsh-hook preexec xterm_title_preexec
+
+#######################################################
+# 个人配置
+#######################################################
+# 加载 Powerlevel10k 自定义配置
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# 加载fzf配置
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# node.js (安装nvim的插件前要安装这个)
+# 加载node.js (安装nvim的插件前要安装这个)
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
+# 懒加载 nvm
+load_nvm() {
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
+nvm_lazy_load() {
+    # Load NVM only if it's not already loaded
+    if ! command -v nvm &> /dev/null; then
+        load_nvm
+    fi
+}
+# Add any commands that require Node.js here
+nvm_commands=(node npm npx claude)
+for cmd in "${nvm_commands[@]}"; do
+    eval "
+    function $cmd {
+        nvm_lazy_load
+        unset -f $cmd
+        $cmd \"\$@\"
+    }"
+done
+# 立即加载 nvm（如果你更喜欢这样,会导致启动多400ms）
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
 
 # 加载 zinit 附加组件以提升性能，没使用Turbo模式
 zinit light-mode for \
@@ -329,4 +312,3 @@ zinit light-mode for \
 
 # ==========starship配置==========
 # eval "$(starship init zsh)"
-
