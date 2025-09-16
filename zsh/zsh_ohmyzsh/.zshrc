@@ -36,10 +36,8 @@ plugins=(
 )
 # 自定义插件目录
 # ZSH_CUSTOM=/path/to/new-custom-folder
-source $ZSH/oh-my-zsh.sh
 
-# ==========starship配置==========
-eval "$(starship init zsh)"
+source $ZSH/oh-my-zsh.sh
 
 # =====如果想手动加载插件=====
 # #git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
@@ -139,7 +137,7 @@ alias ping='ping -c 5'
 # =====第三方工具配置=====
 # fzf_config (模糊查找工具)
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
+# 美化fzf显示
 if [[ -x "$(command -v fzf)" ]]; then
 	export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
 	  --info=inline-right \
@@ -171,11 +169,58 @@ export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
 
 # =====加载本地配置=====
 # 加载本地特定配置（如果存在）
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+# [ -f ~/.zshrc.local ] && source ~/.zshrc.local
+[[ -f ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh ]] && source ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh
+
+#######################################################
+# 函数
+#######################################################
+
+# 启动程序并从终端分离
+function runfree() {
+	"$@" > /dev/null 2>&1 & disown
+}
+
+# 带进度的文件复制
+function cpp() {
+	if command -v rsync > /dev/null; then
+		rsync -ah --info=progress2 "${1}" "${2}"
+	else
+		cp "${1}" "${2}"
+	fi
+}
+
+# 复制并切换到目录
+function cpg() {
+	cp "$1" "$2" && [[ -d "$2" ]] && cd "$2"
+}
+
+# 移动并切换到目录
+function mvg() {
+	mv "$1" "$2" && [[ -d "$2" ]] && cd "$2"
+}
+
+# 创建目录并切换进入
+function mkdirg() {
+	mkdir -p "$1" && cd "$1"
+}
+
+# 快速查找并编辑文件
+function fe() {
+	local file
+	file=$(find . -type f -name "*$1*" | head -1)
+	[[ -n "$file" ]] && ${EDITOR:-nvim} "$file"
+}
+
+# 快速创建备份
+function backup() {
+	cp "$1" "${1}.backup.$(date +%Y%m%d_%H%M%S)"
+}
 
 # =====性能优化=====
 # 禁用不需要的功能以提高性能
 # unsetopt correct_all
 # unsetopt share_history  # 同步窗口的命令
 
-# echo "🚀 Zsh configuration loaded successfully!"
+# ==========starship配置==========
+eval "$(starship init zsh)"
