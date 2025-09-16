@@ -20,6 +20,7 @@ plugins=(
     git
     zsh-syntax-highlighting
     zsh-autosuggestions
+    fzf-tab
     # 推荐添加的插件
     # web_search                    #  可以在终端打开浏览器搜索关键词
     # z                           # 快速跳转目录
@@ -138,6 +139,29 @@ alias ping='ping -c 5'
 # =====第三方工具配置=====
 # fzf_config (模糊查找工具)
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if [[ -x "$(command -v fzf)" ]]; then
+	export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+	  --info=inline-right \
+	  --ansi \
+	  --layout=reverse \
+	  --border=rounded \
+	  --color=border:#27a1b9 \
+	  --color=fg:#c0caf5 \
+	  --color=gutter:#16161e \
+	  --color=header:#ff9e64 \
+	  --color=hl+:#2ac3de \
+	  --color=hl:#2ac3de \
+	  --color=info:#545c7e \
+	  --color=marker:#ff007c \
+	  --color=pointer:#ff007c \
+	  --color=prompt:#2ac3de \
+	  --color=query:#c0caf5:regular \
+	  --color=scrollbar:#27a1b9 \
+	  --color=separator:#ff9e64 \
+	  --color=spinner:#ff007c \
+	"
+fi
 
 # node.js (安装nvim的插件前要安装这个)
 export NVM_DIR="$HOME/.nvm"
