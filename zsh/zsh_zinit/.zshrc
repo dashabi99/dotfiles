@@ -271,9 +271,25 @@ function backup() {
 }
 
 #######################################################
-# ZSH 语法高亮，如果用fast语法高亮插件，这个就不用了
+# ZSH 语法高亮的个人配置文件，如果用fast-syntax-highlighting语法高亮插件，这个就不用了,fast-theme -l 查看主题，然后设置
 #######################################################
 # [[ -f ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh ]] && source ~/.zsh/zsh-syntax-highlightin-tokyonight.zsh
+
+#######################################################
+# 自动设置终端标题,可以取消上面的omz的标题设置，打开下面的自己定义窗口标题，配合wezterm
+#######################################################
+# autoload -Uz add-zsh-hook
+#
+# # 在命令提示符准备好之前更新标题，只显示用户、主机名和路径
+# function xterm_title_precmd () {
+#     print -Pn -- '\e]2;%n@%m %~\a'
+# }
+# # 在命令执行前更新标题，显示完整的信息，包括分隔符 -->
+# function xterm_title_preexec () {
+#     print -Pn -- '\e]2;%n@%m %~ --> ' && print -n -- "${(q)1}\a"
+# }
+# add-zsh-hook precmd xterm_title_precmd
+# add-zsh-hook preexec xterm_title_preexec
 
 #######################################################
 # 个人配置
