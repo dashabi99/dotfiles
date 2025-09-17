@@ -1,0 +1,106 @@
+! XTerm 配置文件
+! 此文件包含 XTerm 终端的各种配置选项
+
+! ==================== 外观设置 ====================
+! 窗口大小设置（以字符为单位）
+xterm*geometry: 120x30
+
+! 字体设置
+xterm*faceName: Monospace
+xterm*faceSize: 12
+
+! 窗口背景色和文字颜色
+xterm*background: #1e1e1e
+xterm*foreground: #d4d4d4
+
+! 游标颜色
+xterm*cursorColor: #ffffff
+
+! ==================== 滚动条设置 ====================
+! 启用滚动条
+xterm*scrollBar: true
+
+! 滚动条位置（right 或 left）
+! xterm*scrollBarSide: right
+
+! 滚动缓冲区大小（行数）
+xterm*saveLines: 10000
+
+! ==================== 选择和剪贴板 ====================
+! 启用选择时自动复制到剪贴板
+xterm*selectToClipboard: true
+
+! 粘贴时确认（防止意外粘贴）
+xterm*pasteConfirm: true
+
+! ==================== 键盘设置 ====================
+! 启用 Alt 键作为 Meta 键
+xterm*metaSendsEscape: true
+
+! 启用 Delete 键发送 DEL 字符
+xterm*deleteIsDEL: true
+
+! ==================== 其他功能设置 ====================
+! 启用菜单栏
+xterm*menuBar: true
+
+! 启用工具提示
+xterm*toolBar: false
+
+! 窗口标题
+xterm*title: XTerm Terminal
+
+! 启用 ANSI 颜色支持
+xterm*colorMode: true
+
+! ==================== 颜色主题设置 ====================
+! 定义 ANSI 颜色
+xterm*color0:  #2e3436  ! 黑色
+xterm*color1:  #cc0000  ! 红色
+xterm*color2:  #4e9a06  ! 绿色
+xterm*color3:  #c4a000  ! 黄色
+xterm*color4:  #3465a4  ! 蓝色
+xterm*color5:  #75507b  ! 紫色
+xterm*color6:  #06989a  ! 青色
+xterm*color7:  #d3d7cf  ! 白色
+xterm*color8:  #555753  ! 亮黑色
+xterm*color9:  #ef2929  ! 亮红色
+xterm*color10: #8ae234  ! 亮绿色
+xterm*color11: #fce94f  ! 亮黄色
+xterm*color12: #729fcf  ! 亮蓝色
+xterm*color13: #ad7fa8  ! 亮紫色
+xterm*color14: #34e2e2  ! 亮青色
+xterm*color15: #eeeeec  ! 亮白色
+
+! ==================== 透明度设置 ====================
+! 启用伪透明（需要窗口管理器支持）
+xterm*transparent: true
+xterm*transpscrollbar: true
+
+! ==================== 快捷键设置 ====================
+! Ctrl+Shift+C 复制和 Ctrl+Shift+V 粘贴
+xterm*vt100.translations: #override Ctrl Shift <Key>C: select-start() select-end(PRIMARY) select-end(CLIPBOARD)\n\
+                         Ctrl Shift <Key>V: insert-selection(CLIPBOARD)
+
+! ==================== 字符编码 ====================
+! 设置字符编码为 UTF-8
+xterm*locale: true
+xterm*utf8: 1
+
+! ==================== 其他优化设置 ====================
+! 启用双缓冲以减少闪烁
+xterm*doubleBuffer: true
+
+! 启用快速滚动
+xterm*fastScroll: true
+
+! 设置闪烁文本的频率（毫秒）
+xterm*blinkRate: 500
+
+! 启用视觉响铃而不是音频响铃
+xterm*visualBell: true
+
+! 设置终端类型
+xterm*termName: xterm-256color
+
+! 加载方法:xrdb -merge ~/.Xresources
