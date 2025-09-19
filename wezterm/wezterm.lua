@@ -105,6 +105,20 @@ config.font = wezterm.font_with_fallback({
 	{ family = "UbuntuMono Nerd Font", weight = "Medium", scale = 1.35 },
 	"Noto Color Emoji",
 })
+-- 为特定Unicode范围指定字体
+config.font_rules = {
+	-- Nerd Font 符号范围
+	{
+		intensity = "Normal",
+		italic = false,
+		font = wezterm.font_with_fallback({
+			"Symbols Nerd Font Mono",
+			"Maple Mono NF CN",
+			"FiraCode Nerd Font",
+		}),
+	},
+}
+
 -- 字体大小和行高
 config.font_size = 13
 config.line_height = 0.9
@@ -403,6 +417,7 @@ wezterm.on("update-status", function(window, pane)
 	local bat_info = wezterm.battery_info()
 	if #bat_info > 0 then
 		local charge = bat_info[1].state_of_charge * 100
+		-- 这个图标不好看，不用了
 		-- local bat_icon = charge > 80 and "🔋" or charge > 20 and "🔋" or "🪫"
 		local bat_icon
 		if charge > 80 then
@@ -420,8 +435,8 @@ wezterm.on("update-status", function(window, pane)
 	-- 左状态栏
 	window:set_left_status(wezterm.format({
 		{ Foreground = { Color = stat_color } },
-		{ Text = "  " },
-		{ Text = wezterm.nerdfonts.dev_apple .. " " .. stat },
+		{ Text = " " },
+		{ Text = wezterm.nerdfonts.dev_apple .. "  " .. stat },
 		{ Text = " " },
 		{ Text = wezterm.nerdfonts.cod_terminal_linux .. "  " },
 	}))
