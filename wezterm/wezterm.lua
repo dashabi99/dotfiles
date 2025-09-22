@@ -101,23 +101,23 @@ config.default_workspace = "Normal"
 config.font = wezterm.font_with_fallback({
 	{ family = "Maple Mono NF CN", weight = "Regular" },
 	{ family = "FiraCode Nerd Font", weight = "Regular" },
+	{ family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
 	{ family = "JetBrains Mono", weight = "Medium" },
-	{ family = "UbuntuMono Nerd Font", weight = "Medium", scale = 1.35 },
 	"Noto Color Emoji",
 })
--- 为特定Unicode范围指定字体
-config.font_rules = {
-	-- Nerd Font 符号范围
-	{
-		intensity = "Normal",
-		italic = false,
-		font = wezterm.font_with_fallback({
-			"Symbols Nerd Font Mono",
-			"Maple Mono NF CN",
-			"FiraCode Nerd Font",
-		}),
-	},
-}
+-- -- 为特定Unicode范围指定字体,使用这个导致maple的info,error图标变得很小；
+-- config.font_rules = {
+-- 	-- Nerd Font 符号范围
+-- 	{
+-- 		intensity = "Normal",
+-- 		italic = false,
+-- 		font = wezterm.font_with_fallback({
+-- 			"Symbols Nerd Font Mono",
+-- 			-- "Maple Mono NF CN",
+-- 			"FiraCode Nerd Font",
+-- 		}),
+-- 	},
+-- }
 
 -- 字体大小和行高
 config.font_size = 13
@@ -436,7 +436,7 @@ wezterm.on("update-status", function(window, pane)
 	window:set_left_status(wezterm.format({
 		{ Foreground = { Color = stat_color } },
 		{ Text = " " },
-		{ Text = wezterm.nerdfonts.dev_apple .. "  " .. stat },
+		{ Text = wezterm.nerdfonts.dev_apple .. " " .. stat },
 		{ Text = " " },
 		{ Text = wezterm.nerdfonts.cod_terminal_linux .. "  " },
 	}))
