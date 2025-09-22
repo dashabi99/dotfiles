@@ -5,11 +5,11 @@ config:
   icon-position: "left" # show the icon to the "left" or "right" of the window name (defaults to left)
 
 icons:
-  # ssh: " "
-  ssh: "󰣀"
+  ssh: "󰣀 "
   nvim: " "
   vim: " "
   bash: " "
+  top: "󰓅 "
   htop: "󰓅 "
   nvtop: " "
   root: "󰦣 "
