@@ -14,8 +14,8 @@ vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 -- 命令行模式下，将 'jk' 映射为 'Esc'
 vim.keymap.set("c", "jk", "<Esc>", { noremap = true, silent = true })
 
+-- 下面这两个注释掉，不然会导致在视觉模式下选择卡顿
 -- 视觉模式下，将 'jk' 映射为 'Esc'
-vim.keymap.set("v", "jk", "<Esc>", { noremap = true, silent = true })
-
+-- vim.keymap.set("v", "jk", "<Esc>", { noremap = true, silent = true })
 -- 选择模式下，将 'jk' 映射为 'Esc'
-vim.keymap.set("x", "jk", "<Esc>", { noremap = true, silent = true })
+-- vim.keymap.set("x", "jk", "<Esc>", { noremap = true, silent = true })
