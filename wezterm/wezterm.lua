@@ -105,19 +105,19 @@ config.font = wezterm.font_with_fallback({
 	{ family = "JetBrains Mono", weight = "Medium" },
 	"Noto Color Emoji",
 })
--- -- 为特定Unicode范围指定字体,使用这个导致maple的info,error图标变得很小；
--- config.font_rules = {
--- 	-- Nerd Font 符号范围
--- 	{
--- 		intensity = "Normal",
--- 		italic = false,
--- 		font = wezterm.font_with_fallback({
--- 			"Symbols Nerd Font Mono",
--- 			-- "Maple Mono NF CN",
--- 			"FiraCode Nerd Font",
--- 		}),
--- 	},
--- }
+-- 为特定Unicode范围指定字体,使用这个导致maple的info,error图标变得很小；
+config.font_rules = {
+	-- Nerd Font 符号范围
+	{
+		intensity = "Normal",
+		italic = false,
+		font = wezterm.font_with_fallback({
+			"Symbols Nerd Font Mono",
+			"Maple Mono NF CN",
+			"FiraCode Nerd Font",
+		}),
+	},
+}
 
 -- 字体大小和行高
 config.font_size = 13
