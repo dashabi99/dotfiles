@@ -164,7 +164,7 @@ config.background = {
 	{
 		source = {
 			--   File = 'D:/壁纸/wallhaven-858lz1_2560x1600.png',
-			File = "/home/mm/Pictures/001.jpg",
+			File = "/home/mm/dotfiles/pictures/001.jpg",
 		},
 	},
 }
