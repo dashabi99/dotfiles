@@ -160,14 +160,14 @@ config.status_update_interval = 1000
 --亚力克模糊
 -- config.macos_window_background_blur = 10
 --把自己的壁纸放到这里，设置背景图片
--- config.background = {
---   {
---     source = {
---     --   File = 'D:/壁纸/wallhaven-858lz1_2560x1600.png',
---       File = '/home/mm/Pictures/space.jpg',
---     },
---   }
--- }
+config.background = {
+	{
+		source = {
+			--   File = 'D:/壁纸/wallhaven-858lz1_2560x1600.png',
+			File = "/home/mm/Pictures/001.jpg",
+		},
+	},
+}
 
 -- ============================================================================
 -- 定义多系统都需要的变量,避免重复
