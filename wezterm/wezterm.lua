@@ -83,6 +83,8 @@ config.scrollback_lines = 10000
 config.front_end = "WebGpu"
 config.webgpu_power_preference = "HighPerformance"
 config.webgpu_force_fallback_adapter = false
+-- 可以选择打开或者关闭，感觉没区别，就是剪切板有点难受
+-- config.enable_wayland = false
 
 --添加动画fps,以及光标设置
 config.animation_fps = 120
