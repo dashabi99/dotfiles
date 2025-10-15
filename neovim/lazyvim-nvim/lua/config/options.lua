@@ -36,7 +36,8 @@ vim.opt.incsearch = true -- 增量搜索
 
 -- ========== 命令行和界面设置 ==========
 vim.opt.cmdheight = 1 -- 命令行高度
-vim.opt.showmode = false -- 隐藏模式提示（使用statusline显示）
+vim.opt.showmode = true -- 不隐藏模式提示（使用statusline显示）
+vim.opt.showcmd = true
 vim.opt.showtabline = 2 -- 始终显示标签行
 vim.opt.pumheight = 15 -- 弹出菜单最大高度（增加到15，显示更多选项）
 
