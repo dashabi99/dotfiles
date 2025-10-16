@@ -1,3 +1,4 @@
+-- 上面的颜色比下面的好看一点
 return {
   -- add gruvbox
   { "tjdevries/colorbuddy.nvim" },
@@ -11,3 +12,12 @@ return {
     },
   },
 }
+-- return {
+--   lazy = false,
+--   priority = 1000,
+--   -- dir = "~/plugins/colorbuddy.nvim",
+--   "tjdevries/colorbuddy.nvim",
+--   config = function()
+--     vim.cmd.colorscheme("gruvbuddy")
+--   end,
+-- }

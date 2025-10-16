@@ -67,25 +67,25 @@ autocmd("BufEnter", {
 -- ========== 外观和主题 ==========
 
 -- 设置行号颜色
-autocmd("BufEnter", {
-  group = augroup("line_number_colors", { clear = true }),
-  pattern = "*",
-  desc = "设置行号颜色",
-  callback = function()
-    -- 可以根据不同主题调整颜色
-    local colors = {
-      tokyonight = "#a9b1d6",
-      catppuccin = "#89b4fa",
-      gruvbox = "#928374",
-      default = "#a9b1d6",
-    }
-    -- 获取当前主题名称（如果可能的话）
-    local colorscheme = vim.g.colors_name or "default"
-    local color = colors[colorscheme] or colors.default
-    vim.api.nvim_set_hl(0, "LineNr", { fg = color, bg = "none" })
-    vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ff9e64", bg = "none", bold = true })
-  end,
-})
+-- autocmd("BufEnter", {
+--   group = augroup("line_number_colors", { clear = true }),
+--   pattern = "*",
+--   desc = "设置行号颜色",
+--   callback = function()
+--     -- 可以根据不同主题调整颜色
+--     local colors = {
+--       tokyonight = "#a9b1d6",
+--       catppuccin = "#89b4fa",
+--       gruvbox = "#928374",
+--       default = "#a9b1d6",
+--     }
+--     -- 获取当前主题名称（如果可能的话）
+--     local colorscheme = vim.g.colors_name or "default"
+--     local color = colors[colorscheme] or colors.default
+--     vim.api.nvim_set_hl(0, "LineNr", { fg = color, bg = "none" })
+--     vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ff9e64", bg = "none", bold = true })
+--   end,
+-- })
 
 -- ========== 文件类型特定设置 ==========
 
