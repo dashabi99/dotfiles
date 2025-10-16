@@ -25,9 +25,9 @@ autocmd("TextYankPost", {
   desc = "高亮复制的文本",
   callback = function()
     vim.highlight.on_yank({
-      timeout = 300,    -- 高亮持续时间
-      visual = true,    -- 在visual模式下也高亮
-      higroup = "IncSearch" -- 使用IncSearch高亮组，可以自定义
+      timeout = 300, -- 高亮持续时间
+      visual = true, -- 在visual模式下也高亮
+      higroup = "IncSearch", -- 使用IncSearch高亮组，可以自定义
     })
   end,
 })
@@ -77,7 +77,7 @@ autocmd("BufEnter", {
       tokyonight = "#a9b1d6",
       catppuccin = "#89b4fa",
       gruvbox = "#928374",
-      default = "#a9b1d6"
+      default = "#a9b1d6",
     }
     -- 获取当前主题名称（如果可能的话）
     local colorscheme = vim.g.colors_name or "default"
@@ -95,10 +95,10 @@ autocmd("FileType", {
   pattern = "markdown",
   desc = "Markdown 文件特殊设置",
   callback = function()
-    vim.opt_local.wrap = true        -- 启用换行
-    vim.opt_local.linebreak = true   -- 按词换行
-    vim.opt_local.spell = true       -- 启用拼写检查
-    vim.opt_local.conceallevel = 2   -- 隐藏markdown语法
+    vim.opt_local.wrap = true -- 启用换行
+    vim.opt_local.linebreak = true -- 按词换行
+    vim.opt_local.spell = true -- 启用拼写检查
+    vim.opt_local.conceallevel = 2 -- 隐藏markdown语法
   end,
 })
 
@@ -110,7 +110,7 @@ autocmd("FileType", {
   callback = function()
     vim.opt_local.tabstop = 2
     vim.opt_local.shiftwidth = 2
-    vim.opt_local.conceallevel = 0  -- 显示所有JSON语法
+    vim.opt_local.conceallevel = 0 -- 显示所有JSON语法
   end,
 })
 
@@ -126,49 +126,22 @@ autocmd("FileType", {
   end,
 })
 
--- ========== 性能优化 ==========
-
--- -- 大文件优化
--- autocmd("BufReadPre", {
---   group = augroup("large_file_settings", { clear = true }),
---   pattern = "*",
---   desc = "大文件性能优化",
---   callback = function()
---     local file_size = vim.fn.getfsize(vim.fn.expand("%"))
---     if file_size > 1024 * 1024 then -- 大于1MB的文件
---       vim.opt_local.syntax = "off"
---       vim.opt_local.filetype = ""
---       vim.opt_local.undolevels = -1
---       vim.opt_local.swapfile = false
---       vim.opt_local.loadplugins = false
---       print("大文件检测: 已禁用部分功能以提高性能")
---     end
---   end,
--- })
-
--- ========== 终端设置 ==========
-
--- 终端模式自动进入插入模式
--- autocmd("TermOpen", {
---   group = augroup("terminal_settings", { clear = true }),
---   pattern = "*",
---   desc = "终端打开时的设置",
---   callback = function()
---     vim.opt_local.number = false
---     vim.opt_local.relativenumber = false
---     vim.opt_local.signcolumn = "no"
---     vim.cmd("startinsert") -- 自动进入插入模式
---   end,
--- })
-
 -- ========== 窗口和缓冲区管理 ==========
 
 -- 自动关闭某些特殊窗口
 autocmd("FileType", {
   group = augroup("close_with_q", { clear = true }),
   pattern = {
-    "help", "startuptime", "qf", "lspinfo", "man", "checkhealth",
-    "tsplayground", "notify", "noice", "Trouble"
+    "help",
+    "startuptime",
+    "qf",
+    "lspinfo",
+    "man",
+    "checkhealth",
+    "tsplayground",
+    "notify",
+    "noice",
+    "Trouble",
   },
   desc = "特殊窗口按q关闭",
   callback = function(event)
@@ -185,19 +158,5 @@ autocmd("VimResized", {
     local current_tab = vim.fn.tabpagenr()
     vim.cmd("tabdo wincmd =")
     vim.cmd("tabnext " .. current_tab)
-  end,
-})
-
--- ========== 调试信息 ==========
-
--- 启动时显示加载信息（可选，调试用）
-autocmd("VimEnter", {
-  group = augroup("startup_message", { clear = true }),
-  once = true,
-  desc = "显示启动信息",
-  callback = function()
-    local stats = require("lazy").stats()
-    local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
-    print(string.format("Neovim 启动完成! 加载了 %d 个插件，耗时 %.2f ms", stats.loaded, ms))
   end,
 })
