@@ -18,14 +18,14 @@ return {
 
           -- 左侧
           -- 带括号 [模式]
-          -- table.insert(segments, extensions.mode)
+          table.insert(segments, extensions.mode)
           -- 去掉[]
-          table.insert(
-            segments,
-            extensions.gen_mode({
-              format_string = " %s ",
-            })
-          )
+          -- table.insert(
+          --   segments,
+          --   extensions.gen_mode({
+          --     format_string = " %s ",
+          --   })
+          -- )
           table.insert(segments, " ")
           table.insert(
             segments,

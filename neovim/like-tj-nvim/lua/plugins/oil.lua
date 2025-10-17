@@ -45,19 +45,4 @@ return {
     "akinsho/bufferline.nvim",
     enabled = false,
   },
-  -- {
-  --   "akinsho/bufferline.nvim",
-  --   version = "*",
-  --   dependencies = "nvim-tree/nvim-web-devicons",
-  --   opts = {
-  --     options = {
-  --       numbers = "ordinal", -- 显示序号
-  --       diagnostics = "nvim_lsp",
-  --       separator_style = "thin",
-  --       always_show_bufferline = true,
-  --       show_buffer_close_icons = false,
-  --       show_close_icon = false,
-  --     },
-  --   },
-  -- },
 }
