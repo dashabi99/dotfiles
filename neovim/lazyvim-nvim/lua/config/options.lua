@@ -70,6 +70,7 @@ vim.opt.splitright = true -- 垂直分割在右方
 
 -- ========== 颜色和外观 ==========
 vim.opt.termguicolors = true -- 启用真彩色
+vim.opt.fillchars:append({ eob = "~" }) -- 使没有用的行像原生vim一样显示~
 
 -- ========== 不可见字符 ==========
 -- vim.opt.list = false -- 默认不显示不可见字符
