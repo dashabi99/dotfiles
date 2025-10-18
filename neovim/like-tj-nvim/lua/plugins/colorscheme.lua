@@ -1,4 +1,4 @@
--- 上面的颜色比下面的好看一点
+-- 如果是使用的lazyvim用上面的，如果使用的自己配置的用下面的
 return {
   -- add gruvbox
   { "tjdevries/colorbuddy.nvim" },
