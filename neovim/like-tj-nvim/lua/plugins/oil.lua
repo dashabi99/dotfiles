@@ -20,9 +20,10 @@ return {
           ["<C-j>"] = false,
           ["<M-v>"] = "actions.select_split",
         },
-        win_options = {
-          winbar = "%{v:lua.CustomOilBar()}",
-        },
+        -- 如果使用的别的bufline插件，把这个禁用
+        -- win_options = {
+        --   winbar = "%{v:lua.CustomOilBar()}",
+        -- },
         view_options = {
           show_hidden = true,
           is_always_hidden = function(name, _)
