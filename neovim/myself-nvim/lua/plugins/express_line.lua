@@ -1,0 +1,89 @@
+return {
+  {
+    "tjdevries/express_line.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      local builtin = require("el.builtin")
+      local extensions = require("el.extensions")
+      local subscribe = require("el.subscribe")
+      local sections = require("el.sections")
+
+      vim.opt.laststatus = 3
+
+      require("el").setup({
+        generator = function()
+          local segments = {}
+
+          -- 左侧
+          -- 带括号 [模式]
+          table.insert(segments, extensions.mode)
+          -- 去掉[]
+          -- table.insert(
+          --   segments,
+          --   extensions.gen_mode({
+          --     format_string = " %s ",
+          --   })
+          -- )
+          table.insert(segments, " ")
+          table.insert(
+            segments,
+            subscribe.buf_autocmd("el-git-branch", "BufEnter", function(win, buf)
+              local branch = extensions.git_branch(win, buf)
+              if branch then
+                return branch
+              end
+            end)
+          )
+          table.insert(
+            segments,
+            subscribe.buf_autocmd("el-git-changes", "BufWritePost", function(win, buf)
+              local changes = extensions.git_changes(win, buf)
+              if changes then
+                return changes
+              end
+            end)
+          )
+          -- 自定义：显示队列中的任务数量
+          table.insert(segments, function()
+            local task_count = #require("misery.scheduler").tasks
+            if task_count == 0 then
+              return ""
+            else
+              return string.format(" (Queued Events: %d)", task_count)
+            end
+          end)
+
+          -- 中间
+          table.insert(segments, sections.split)
+          table.insert(
+            segments,
+            subscribe.buf_autocmd("el_file_icon", "BufRead", function(_, buffer)
+              return extensions.file_icon(_, buffer)
+            end)
+          )
+          -- 显示%f文件名,%F显示完整的路径和文件名
+          table.insert(segments, " %F")
+          table.insert(segments, builtin.modified)
+
+          -- 右侧
+          table.insert(segments, sections.split)
+          table.insert(segments, builtin.filetype)
+          table.insert(segments, " [")
+          table.insert(segments, builtin.line_with_width(3))
+          table.insert(segments, ":")
+          table.insert(segments, builtin.column_with_width(2))
+          table.insert(segments, "]")
+
+          return segments
+        end,
+      })
+    end,
+  },
+  -- 禁用lazyvim自带的状态行
+  {
+    "nvim-lualine/lualine.nvim",
+    enabled = false,
+  },
+}
