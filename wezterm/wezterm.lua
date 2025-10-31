@@ -101,10 +101,12 @@ config.default_workspace = "Normal"
 -- ============================================================================
 -- 当第一个字体没安装时，使用第二个字体
 config.font = wezterm.font_with_fallback({
+	{ family = "Ioskeley Mono", weight = "Regular" },
+	{ family = "LXGW WenKai Mono", weight = "Regular" },
 	-- { family = "Maple Mono NF CN", weight = "Regular" },
-	{ family = "FiraCode Nerd Font", weight = "Regular" },
-	{ family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
-	{ family = "JetBrains Mono", weight = "Medium" },
+	-- { family = "FiraCode Nerd Font", weight = "Regular" },
+	-- { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
+	-- { family = "JetBrains Mono", weight = "Medium" },
 	"Noto Color Emoji",
 })
 -- 为特定Unicode范围指定字体；
@@ -114,12 +116,9 @@ config.font_rules = {
 		intensity = "Normal",
 		italic = false,
 		font = wezterm.font_with_fallback({
-			-- 使用Ioskeley和LXGW字体后，就可以关掉上面的fallback和下面的三个字体设置了
-			"Ioskeley Mono",
-			"LXGW WenKai Mono",
 			"Symbols Nerd Font Mono",
 			-- "Maple Mono NF CN",
-			"FiraCode Nerd Font",
+			-- "FiraCode Nerd Font",
 		}),
 	},
 }
