@@ -51,6 +51,7 @@
       - 例如：`git remote add origin https://github.com/dashabi99/dotfiles.git`
     - 使用sshkey：
     `git remote add origin git@github.com:<USERNAME>/<REPO>.git`
+        - 如果指令不管用可以直接 `git clone git@github.com:<USERNAME>/<REPO>.git`
     - 如果一开始用了token的仓库连接
       - `git remote set-url origin git@github.com:dashabi99/dotfiles.git`
     - 验证修改： `git remote -v`
