@@ -12,18 +12,27 @@ return {
       end
 
       require("oil").setup({
+        default_file_explorer = true, -- 替代 netrw 作为默认文件浏览器
+        -- use_default_keymaps = false, -- 不使用默认键位（自定义键位）
+        delete_to_trash = true, -- 删除文件到回收站而非永久删除
+        skip_confirm_for_simple_edits = true, -- 简单编辑跳过确认
+        watch_for_changes = true, -- 监听外部文件变化
         columns = { "icon" },
         keymaps = {
           ["<C-h>"] = false,
           ["<C-l>"] = false,
           ["<C-k>"] = false,
           ["<C-j>"] = false,
-          ["<M-v>"] = "actions.select_split",
+          ["|"] = { "actions.select", opts = { vertical = true } }, -- 左右分屏
+          ["\\"] = { "actions.select", opts = { horizontal = true } }, -- 上下分屏
+          ["K"] = { "actions.preview", mode = "n" }, -- 预览文件
+          ["<BS>"] = { "actions.parent", mode = "n" }, -- 往回导航
+          ["_"] = { "actions.open_cwd", mode = "n" }, -- 回到当前目录
         },
-        -- 如果使用的别的bufline插件，把这个禁用
-        -- win_options = {
-        --   winbar = "%{v:lua.CustomOilBar()}",
-        -- },
+        -- 浏览别的目录时现实路径
+        win_options = {
+          winbar = "%{v:lua.CustomOilBar()}",
+        },
         view_options = {
           show_hidden = true,
           is_always_hidden = function(name, _)
