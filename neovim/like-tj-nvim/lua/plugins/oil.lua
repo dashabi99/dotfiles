@@ -7,7 +7,6 @@ return {
       CustomOilBar = function()
         local path = vim.fn.expand("%")
         path = path:gsub("oil://", "")
-
         return "  " .. vim.fn.fnamemodify(path, ":.")
       end
 
@@ -24,12 +23,12 @@ return {
           ["<C-k>"] = false,
           ["<C-j>"] = false,
           ["|"] = { "actions.select", opts = { vertical = true } }, -- 左右分屏
-          ["\\"] = { "actions.select", opts = { horizontal = true } }, -- 上下分屏
+          ["-"] = { "actions.select", opts = { horizontal = true } }, -- 上下分屏
           ["K"] = { "actions.preview", mode = "n" }, -- 预览文件
-          ["<BS>"] = { "actions.parent", mode = "n" }, -- 往回导航
-          ["_"] = { "actions.open_cwd", mode = "n" }, -- 回到当前目录
+          ["<BS>"] = { "actions.parent", mode = "n" }, -- 往上一级目录导航
+          ["_"] = { "actions.open_cwd", mode = "n" }, -- 回到打开文件时的目录
         },
-        -- 浏览别的目录时现实路径
+        -- 浏览别的目录时显示路径
         win_options = {
           winbar = "%{v:lua.CustomOilBar()}",
         },
@@ -43,10 +42,10 @@ return {
       })
 
       -- Open parent directory in current window
-      vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+      vim.keymap.set("n", "<leader>e", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
       -- Open parent directory in floating window
-      vim.keymap.set("n", "<space>-", require("oil").toggle_float)
+      vim.keymap.set("n", "<leader>E", require("oil").toggle_float)
     end,
   },
 
