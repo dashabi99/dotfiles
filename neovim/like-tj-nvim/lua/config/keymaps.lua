@@ -17,8 +17,11 @@ map("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "减少窗口宽度" })
 map("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "增加窗口宽度" })
 
 -- 缓冲区导航
-map("n", "<S-h>", ":bprevious<CR>", { desc = "上一个缓冲区" })
-map("n", "<S-l>", ":bnext<CR>", { desc = "下一个缓冲区" })
+-- map("n", "<S-h>", ":bprevious<CR>", { desc = "上一个缓冲区" })
+-- map("n", "<S-l>", ":bnext<CR>", { desc = "下一个缓冲区" })
+-- 配合oil.nvim插件使用
+map("n", "<S-h>", ":tabp<CR>", { desc = "上一个tab" })
+map("n", "<S-l>", ":tabn<CR>", { desc = "下一个tab" })
 map("n", "<leader>bd", ":bdelete<CR>", { desc = "删除缓冲区" })
 
 -- 更好的缩进

@@ -1,4 +1,5 @@
 vim.opt.shortmess:remove("I") -- 移除 'I' 标志以显示 intro 消息
+vim.g.snacks_animate = false -- 关闭动画
 return {
   "folke/snacks.nvim",
   priority = 1000,

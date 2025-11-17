@@ -27,7 +27,7 @@ return {
           ["K"] = { "actions.preview", mode = "n" }, -- 预览文件
           ["<BS>"] = { "actions.parent", mode = "n" }, -- 往上一级目录导航
           ["-"] = { "actions.open_cwd", mode = "n" }, -- 回到打开文件时的目录
-          -- ["n"] = { "actions.select", opts = { tab = true } }, -- 新标签页打开
+          ["n"] = { "actions.select", opts = { tab = true } }, -- 新标签页打开
           ["<CR>"] = "actions.select", -- 回车打开文件/目录
           -- ["<C-c>"] = "actions.close", -- 关闭 Oil
           ["q"] = "actions.close", -- 关闭 Oil
@@ -51,7 +51,7 @@ return {
       })
 
       -- Open parent directory in current window
-      vim.keymap.set("n", "<leader>e", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+      vim.keymap.set("n", "<leader>e", "<CMD>Oil<CR>", { desc = "Open Oil" })
       -- Open parent directory in floating window
       vim.keymap.set("n", "<leader>E", require("oil").toggle_float)
     end,

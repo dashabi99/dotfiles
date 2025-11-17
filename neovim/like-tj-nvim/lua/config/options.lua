@@ -108,4 +108,4 @@ vim.opt.synmaxcol = 240 -- 限制语法高亮的列数，提高性能
 
 -- ========== 插件特定设置 ==========
 -- 禁用动画
-vim.g.snacks_animate = false
+-- vim.g.snacks_animate = false
