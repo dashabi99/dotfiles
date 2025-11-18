@@ -105,7 +105,3 @@ vim.opt.confirm = true -- 退出前确认未保存的更改
 vim.opt.lazyredraw = false -- 不延迟重绘（新版本nvim已优化）
 vim.opt.ttyfast = true -- 快速终端连接
 vim.opt.synmaxcol = 240 -- 限制语法高亮的列数，提高性能
-
--- ========== 插件特定设置 ==========
--- 禁用动画
--- vim.g.snacks_animate = false
