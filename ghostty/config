@@ -5,6 +5,10 @@
 
 # ============ 字体配置 ============
 font-family = "BerkeleyMono Nerd Font"
+font-family-italic = "Ioskeley Mono"
+#使用中文字体
+font-codepoint-map = U+4E00-U+9FFF,U+3400-U+4DBF=LXGW WenKai Mono
+#字体大小
 font-size = 13
 
 # 窗口标题栏字体
