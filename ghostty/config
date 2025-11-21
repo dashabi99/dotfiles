@@ -1,42 +1,104 @@
-#字体
-font-family = "JetBrainsMono NF Bold"
-#主题
-theme = "catppuccin-latte"
-#使标题框和主题一个颜色 gtk主题为Adwaita时生效
-window-theme = ghostty
-#允许从系统剪切板 读内容
-clipboard-read = allow
-#允许从系统剪切板 写内容
-clipboard-write = allow
-#选中文本时不复制内容
-copy-on-select = false
-#去掉复制内容结尾的空格
-clipboard-trim-trailing-spaces = true
-#窗口的字体
-window-title-font-family = "Adwaita Sans"
-#粗体文本使用明亮调色板
+# ============================================================
+# Ghostty 终端配置文件
+# 配置位置: ~/.config/ghostty/config
+# ============================================================
+
+# ============ 字体配置 ============
+font-family = "BerkeleyMono Nerd Font"
+font-size = 13
+
+# 窗口标题栏字体
+window-title-font-family = "Ioskeley Mono"
+
+# 粗体文本使用明亮色
 bold-is-bright = true
-#输入时隐藏光标
-mouse-hide-while-typing = true
-#设置光标样式为方块
+
+# ============ 主题配置 ============
+theme = "Ubuntu"
+
+# GTK 窗口主题（使标题栏与终端主题一致）
+window-theme = ghostty
+
+# 显示完整的 GTK 标题栏
+gtk-titlebar = true
+
+# ============ 光标配置 ============
+# 禁用 shell 集成的光标控制
 shell-integration-features = no-cursor
+
+# 光标样式：block（块状）
 cursor-style = block
 
-#显示终端上的url链接，需要按下ctrl键才会显示
-link-url = true
-#界面回滚内容多少
-# scrollback-limit = 10000
-#新打开的窗口或者标签页不继承之前的工作目录
-window-inherit-working-directory = false
-#新打开的窗口或者标签页不继承之前的字体大小
-window-inherit-font-size = false
-#新建标签页在标签列表最后添加
-window-new-tab-position = end
-#显示完整的gtk标题栏
-gtk-titlebar = true
-#打开滚动条 暂时没这个功能
+# 光标颜色：金黄色
+cursor-color = #FBB829
 
-#修改一些默认的按键绑定
+# 光标不闪烁
+cursor-style-blink = false
+
+# 输入时隐藏鼠标光标
+mouse-hide-while-typing = true
+
+# ============ 选中文本配置 ============
+# 选中文本背景色：金黄色
+selection-background = #FBB829
+
+# 选中文本前景色：深灰色
+selection-foreground = #1C1B19
+
+# 选中后不自动复制（手动复制）
+copy-on-select = false
+
+# 输入时清除选中的文本
+selection-clear-on-typing = true
+
+# 复制后清除选中的文本
+selection-clear-on-copy = true
+
+# ============ 剪贴板配置 ============
+# 允许读取系统剪贴板
+clipboard-read = allow
+
+# 允许写入系统剪贴板
+clipboard-write = allow
+
+# 复制时去除末尾空格
+clipboard-trim-trailing-spaces = true
+
+# ============ 窗口和标签页配置 ============
+# 新窗口/标签页不继承工作目录
+window-inherit-working-directory = false
+
+# 新窗口/标签页不继承字体大小
+window-inherit-font-size = false
+
+# 新标签页添加到末尾
+window-new-tab-position = end
+
+# 窗口内边距
+window-padding-x = 4
+window-padding-y = 4
+window-padding-balance = true
+
+# ============ 显示配置 ============
+# 回滚缓冲区行数
+scrollback-limit = 10000
+
+# 按住 Ctrl 显示 URL 链接
+link-url = true
+
+# ============ 视觉效果 ============
+# 光标拖尾效果（需要 shader 文件存在）
+custom-shader = ~/dotfiles/ghostty/shaders/cursor_trailing.glsl
+
+# 背景透明度（可选，0.0-1.0）
+# background-opacity = 0.95
+
+# 背景模糊（需要支持的合成器）
+# background-blur-radius = 20
+
+# ============ 键盘快捷键 ============
+
+# --- 标签页导航 ---
 keybind = ctrl+1=goto_tab:1
 keybind = ctrl+2=goto_tab:2
 keybind = ctrl+3=goto_tab:3
@@ -45,6 +107,75 @@ keybind = ctrl+5=goto_tab:5
 keybind = ctrl+6=goto_tab:6
 keybind = ctrl+7=goto_tab:7
 keybind = ctrl+8=goto_tab:8
+keybind = ctrl+9=goto_tab:9
 
-keybind = ctrl+q=close_tab
+# 上一个/下一个标签页
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
+
+# --- 标签页管理 ---
+# 新建标签页
 keybind = ctrl+t=new_tab
+
+# 关闭标签页
+keybind = ctrl+q=close_tab
+
+# 关闭当前窗口
+keybind = ctrl+shift+q=close_surface
+
+# --- 复制粘贴 ---
+# 粘贴
+keybind = ctrl+v=paste_from_clipboard
+
+# 复制（备用快捷键）
+keybind = ctrl+shift+c=copy_to_clipboard
+
+# --- 字体大小调整 ---
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+0=reset_font_size
+
+# --- 分屏（如果支持）---
+# keybind = ctrl+shift+d=new_split:right
+# keybind = ctrl+shift+shift+d=new_split:down
+# keybind = ctrl+shift+w=close_split
+
+# --- 搜索 ---
+keybind = ctrl+f=toggle_quick_terminal
+
+# --- 清屏 ---
+keybind = ctrl+l=clear_screen
+
+# ============ Shell 集成 ============
+# 启用 shell 集成功能（除了光标控制）
+# shell-integration = detect
+
+# 可以指定特定的 shell
+# shell-integration = fish
+# shell-integration = zsh
+# shell-integration = bash
+
+# ============ 性能优化 ============
+# 启用硬件加速（默认开启）
+# gpu = true
+
+# 帧率限制（0 表示不限制）
+# max-fps = 120
+
+# ============ 高级配置 ============
+# 快速启动（牺牲一些兼容性）
+# quick-terminal = true
+
+# 确认关闭（有多个标签页时）
+confirm-close-surface = true
+
+# 窗口装饰
+# window-decoration = true
+
+# ============================================================
+# 配置说明：
+# 1. Ctrl+C 的智能复制功能暂时不可用，使用 Ctrl+Shift+C 替代
+# 2. 如果 shader 文件不存在，注释掉 custom-shader 行
+# 3. 根据需要调整字体大小和窗口内边距
+# 4. 更多配置选项请参考官方文档
+# ============================================================
