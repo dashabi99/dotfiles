@@ -18,7 +18,8 @@ window-title-font-family = "Ioskeley Mono"
 bold-is-bright = true
 
 # ============ 主题配置 ============
-theme = "Ubuntu"
+# theme = "Ubuntu"
+theme = "Monokai Pro"
 
 # GTK 窗口主题（使标题栏与终端主题一致）
 window-theme = ghostty
@@ -27,14 +28,17 @@ window-theme = ghostty
 gtk-titlebar = true
 
 # ============ 光标配置 ============
-# 禁用 shell 集成的光标控制
-shell-integration-features = no-cursor
+#shell集成功能，禁用 shell 集成的光标控制
+shell-integration-features = no-cursor, ssh-env
 
 # 光标样式：block（块状）
 cursor-style = block
 
 # 光标颜色：金黄色
 cursor-color = #FBB829
+
+#光标下的字体颜色
+cursor-text = #1C1B19
 
 # 光标不闪烁
 cursor-style-blink = false
@@ -49,7 +53,7 @@ selection-background = #FBB829
 # 选中文本前景色：深灰色
 selection-foreground = #1C1B19
 
-# 选中后不自动复制（手动复制）
+# 光标选中文字后不自动复制（手动复制）
 copy-on-select = false
 
 # 输入时清除选中的文本
@@ -82,6 +86,10 @@ window-new-tab-position = end
 window-padding-x = 4
 window-padding-y = 4
 window-padding-balance = true
+
+#打开窗口的大小
+# window-height = 40
+# window-width = 110
 
 # ============ 显示配置 ============
 # 回滚缓冲区行数
@@ -131,21 +139,18 @@ keybind = ctrl+shift+q=close_surface
 # 粘贴
 keybind = ctrl+v=paste_from_clipboard
 
-# 复制（备用快捷键）
-keybind = ctrl+shift+c=copy_to_clipboard
+# 复制 当选中文本时ctrl+c是复制，否则为终止程序
+keybind = performable:ctrl+c=copy_to_clipboard
 
 # --- 字体大小调整 ---
-keybind = ctrl+equal=increase_font_size:1
-keybind = ctrl+minus=decrease_font_size:1
-keybind = ctrl+0=reset_font_size
+# keybind = ctrl+equal=increase_font_size:1
+# keybind = ctrl+minus=decrease_font_size:1
+# keybind = ctrl+0=reset_font_size
 
 # --- 分屏（如果支持）---
 # keybind = ctrl+shift+d=new_split:right
 # keybind = ctrl+shift+shift+d=new_split:down
 # keybind = ctrl+shift+w=close_split
-
-# --- 搜索 ---
-keybind = ctrl+f=toggle_quick_terminal
 
 # --- 清屏 ---
 keybind = ctrl+l=clear_screen
@@ -174,7 +179,10 @@ keybind = ctrl+l=clear_screen
 confirm-close-surface = true
 
 # 窗口装饰
-# window-decoration = true
+window-decoration = true
+
+#关闭复制时的通知
+app-notifications = no-clipboard-copy
 
 # ============================================================
 # 配置说明：
