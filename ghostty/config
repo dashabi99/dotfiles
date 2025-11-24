@@ -172,9 +172,6 @@ keybind = ctrl+l=clear_screen
 # max-fps = 120
 
 # ============ 高级配置 ============
-# 快速启动（牺牲一些兼容性）
-# quick-terminal = true
-
 # 确认关闭（有多个标签页时）
 confirm-close-surface = true
 
@@ -183,11 +180,3 @@ window-decoration = true
 
 #关闭复制时的通知
 app-notifications = no-clipboard-copy
-
-# ============================================================
-# 配置说明：
-# 1. Ctrl+C 的智能复制功能暂时不可用，使用 Ctrl+Shift+C 替代
-# 2. 如果 shader 文件不存在，注释掉 custom-shader 行
-# 3. 根据需要调整字体大小和窗口内边距
-# 4. 更多配置选项请参考官方文档
-# ============================================================
