@@ -21,7 +21,7 @@ set hlsearch            " 搜索高亮
 set incsearch           " 增量搜索
 set ignorecase          " 忽略大小写
 set smartcase           " 在搜索模式中智能处理大小写
-set background=dark     " 使用暗色背景
+"set background=dark     " 使用暗色背景
 set wildmenu            " 启用命令补全菜单
 set showmode            " 显示模式
 set showcmd          " 显示命令
@@ -39,24 +39,42 @@ set fileencodings=ucs-bom,utf-8,cp936
 set timeout           " 启用超时
 set ttimeout          " 启用终端按键超时
 set timeoutlen=300    " 键序列超时时间（毫秒）
-set ttimeoutlen=50    " 键码序列超时时间（毫秒）
+set ttimeoutlen=100    " 键码序列超时时间（毫秒）
                       " 注意：-1 会导致使用timeoutlen的值，造成延迟
 
 " 按键映射
-let mapleader = " "      " 设置 <Leader> 键为空格建
-inoremap jk <esc>       " 将 'jk' 映射为 'esc'
-cnoremap jk <c-c>       " 命令行模式下 'jk' 映射为 'c-c'
-" 命令行中按 '空格+b' 打开缓冲区列表
-cnoremap <Leader>b :buffers<cr>:b<space>
-nnoremap <C-h> <C-w>h     " 窗口导航：左
-nnoremap <C-j> <C-w>j     " 窗口导航：下
-nnoremap <C-k> <C-w>k     " 窗口导航：上
-nnoremap <C-l> <C-w>l     " 窗口导航：右
+" 设置 <Leader> 键为空格键
+let mapleader = " "
+" 插入模式下将 'jk' 映射为 'Esc'
+inoremap jk <Esc>
+" 命令行模式下 'jk' 映射为 'Ctrl-c'
+cnoremap jk <C-c>
+" 普通模式按 '<Leader>b' 打开缓冲区列表并进入缓冲区选择命令
+nnoremap <Leader>b :buffers<CR>:b<Space>
+" 窗口导航映射
+nnoremap <C-h> <C-w>h " 左
+nnoremap <C-j> <C-w>j " 下
+nnoremap <C-k> <C-w>k " 上
+nnoremap <C-l> <C-w>l " 右
+" 调整窗口大小
 nnoremap <C-Up>    :resize +2<CR>
 nnoremap <C-Down>  :resize -2<CR>
 nnoremap <C-Left>  :vertical resize -2<CR>
 nnoremap <C-Right> :vertical resize +2<CR>
-nnoremap <Leader>nh :nohl<CR> " 清除搜索高亮
+" 清除搜索高亮
+nnoremap <Leader>nh :nohlsearch<CR>
+" 映射到上一个标签页
+nnoremap <S-h> :tabp<CR>
+" 映射到下一个标签页
+nnoremap <S-l> :tabn<CR>
+" 删除当前缓冲区
+nnoremap <leader>bd :bdelete<CR>
+" 打开一个新的空白标签页
+nnoremap <leader>tn :tabnew 
+" 切换到上一个缓冲区
+nnoremap <leader>bp :bprevious<CR>
+" 切换到下一个缓冲区
+nnoremap <leader>bn :bnext<CR>
 
 " 文件检测
 filetype on          " 启用文件类型检测
@@ -66,10 +84,6 @@ filetype indent on      " 启用文件类型缩进
 " 主题和颜色
 set termguicolors       " 启用真彩色（需要终端支持）
 colorscheme desert      " 默认主题（可替换为插件主题）
-
-
-" Vim 9.1 特性（可选）
-" 如果你想尝试一些 Vim 9.1 的新特性，可以查看更新日志，并根据需要添加到配置中。
 
 " 重载 .vimrc 以应用更改
 " 执行 :source ~/.vimrc 后重启 Vim

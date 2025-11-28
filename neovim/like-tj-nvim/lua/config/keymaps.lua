@@ -16,14 +16,17 @@ map("n", "<C-Down>", ":resize -2<CR>", { desc = "减少窗口高度" })
 map("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "减少窗口宽度" })
 map("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "增加窗口宽度" })
 
--- 缓冲区导航
+-- 默认的缓冲区导航
 -- map("n", "<S-h>", ":bprevious<CR>", { desc = "上一个缓冲区" })
 -- map("n", "<S-l>", ":bnext<CR>", { desc = "下一个缓冲区" })
--- 配合oil.nvim插件使用
+-- 配合oil.nvim插件使用在tab里导航
 map("n", "<S-h>", ":tabp<CR>", { desc = "上一个tab" })
 map("n", "<S-l>", ":tabn<CR>", { desc = "下一个tab" })
-map("n", "<leader>bd", ":bdelete<CR>", { desc = "删除缓冲区" })
-map("n", "<leader>tn", ":tabnew<CR>", { desc = "打开一个空白的tab" })
+map("n", "<leader>tn", ":tabnew ", { desc = "命令模式 tabnew " })
+
+map("n", "<leader>bd", ":bdelete<CR>", { desc = "删除当前缓冲区" })
+map("n", "<leader>bp", ":bprevious<CR>", { desc = "上一个缓冲区" })
+map("n", "<leader>bn", ":bnext<CR>", { desc = "下一个缓冲区" })
 
 -- 更好的缩进
 map("v", "<", "<gv", { desc = "向左缩进" })
