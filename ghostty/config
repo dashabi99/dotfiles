@@ -152,9 +152,6 @@ keybind = performable:ctrl+c=copy_to_clipboard
 # keybind = ctrl+shift+shift+d=new_split:down
 # keybind = ctrl+shift+w=close_split
 
-# --- 清屏 ---
-keybind = ctrl+l=clear_screen
-
 # ============ Shell 集成 ============
 # 启用 shell 集成功能（除了光标控制）
 # shell-integration = detect
