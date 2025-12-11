@@ -294,6 +294,12 @@ backup() {
 # =========================================================
 export NVM_DIR="$HOME/.nvm"
 
+# 方法一：直接加载nvm,会导致zsh启动有延迟
+# export NVM_COMPLETION=true
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+# 方法二：懒加载，在用nvm之前需要先使用定义的词加载一次
 load_nvm() {
   [[ -s "$NVM_DIR/nvm.sh" ]]          && . "$NVM_DIR/nvm.sh"
   [[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
@@ -315,11 +321,6 @@ for cmd in "${nvm_commands[@]}"; do
     $cmd \"\$@\"
   }"
 done
-
-# 立即加载 nvm（如果你更喜欢这样,会导致启动多400ms）
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-# export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
 
 # =========================================================
 # zinit 附加组件（对性能/功能的增强）
