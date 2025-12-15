@@ -11,7 +11,8 @@ vim.lsp.config('lua_ls', {
             workspace = {
                 checkThirdParty = false,
             },
-            format = { enable = true }, -- 启用格式化
+            -- format = { enable = true }, -- 启用lua_ls作为格式化工具
+            stylua = { enabled = true }, -- 启用stylua作为格式化工具
         },
     },
 })
