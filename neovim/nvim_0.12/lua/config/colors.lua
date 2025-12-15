@@ -1,9 +1,6 @@
--- Colorscheme based on vim.lua by Bram Moolenaar)
+-- 主题是unixchad配置的；
+-- https://github.com/gnuunixchad/dotfiles/blob/master/.config/nvim/lua/config/colors.lua
 
---  @authoer nate zhou
---  @since 2024, 2025
-
-vim.cmd.highlight('clear')
 vim.g.colors_name = 'green'
 
 local hi = function(name, val)

@@ -73,9 +73,7 @@ vim.opt.splitbelow = true -- 水平分割在下方
 vim.opt.splitright = true -- 垂直分割在右方
 
 -- ========== 颜色和外观 ==========
--- vim.cmd("syntax on") -- 开启语法高亮
--- vim.cmd("filetype indent on")
-vim.opt.syntax = "on"         -- 开启语法高亮,lua语法
+-- vim.opt.syntax = "on"         -- 开启语法高亮,lua语法
 vim.opt.termguicolors = true  -- 启用真彩色
 vim.o.background = 'dark'
 vim.opt.winborder = "rounded" -- 窗口边框设置为圆角

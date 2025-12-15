@@ -16,7 +16,7 @@ require("plugins.oil")
 -- lsp
 require("plugins.lsp")
 -- 语法高亮
-require("plugins.treesitter")
+--require("plugins.treesitter")
 -- 一些小插件（自动括号，显示颜色，快速跳转）
 require("plugins.tool")
 require("plugins.snacks")
