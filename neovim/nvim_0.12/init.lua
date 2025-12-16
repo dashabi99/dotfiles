@@ -21,3 +21,6 @@ require("plugins.lsp")
 require("plugins.tool")
 -- 模糊查找器
 require("plugins.snacks")
+
+-- 卸载插件 命令模式：lua vim.pack.del({"lock.json的插件名字"})
+-- 更新全部插件 命令模式：lua vim.pack.update()
