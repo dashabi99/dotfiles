@@ -3,8 +3,8 @@ require("config.keymaps")
 require("config.autocmds")
 -- unixchad的主题
 require("config.colors")
--- 德古拉主题
--- require("plugins.dracula")
+-- 插件主题
+-- require("plugins.colorscheme")
 
 -- ===插件===
 -- 图标
@@ -19,4 +19,5 @@ require("plugins.lsp")
 --require("plugins.treesitter")
 -- 一些小插件（自动括号，显示颜色，快速跳转）
 require("plugins.tool")
+-- 模糊查找器
 require("plugins.snacks")
