@@ -23,12 +23,30 @@ end
 
 -- 再配置 blink.cmp
 require("blink.cmp").setup({
-    keymap = { preset = "enter" },
+    keymap = {
+        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+        preset = "enter"
+    },
     appearance = {
         nerd_font_variant = "mono",
     },
+    -- 不自动显示当前函数的信息，按K查看
     completion = {
         documentation = { auto_show = false },
+    },
+    -- 命令模式自动显示补全
+    cmdline = {
+        completion = {
+            menu = {
+                auto_show = true,
+                -- border = "none",
+            },
+        },
+    },
+    -- 编辑代码时自动显示信息
+    signature = {
+        enabled = true
     },
     -- 使用 LuaSnip 预设
     snippets = {
