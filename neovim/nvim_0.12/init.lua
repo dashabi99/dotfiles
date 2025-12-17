@@ -9,6 +9,8 @@ require("config.colors")
 -- ===插件===
 -- 图标
 require("plugins.nvim-web-devicons")
+-- 状态栏
+require("plugins.statusline")
 -- 补全
 require("plugins.blink")
 -- 文件管理器

@@ -41,10 +41,6 @@ vim.opt.showcmd = true  -- 隐藏模式提示（使用statusline显示）
 vim.opt.showtabline = 2 -- 始终显示标签行
 vim.opt.pumheight = 15  -- 弹出菜单最大高度（增加到15，显示更多选项）
 
--- 定义状态栏
-vim.o.statusline = '%F %{FugitiveStatusline()} %h%m%r%= %-16.(%) [ %c : %l ][ %P ]'
-vim.o.laststatus = 3
-
 -- ========== 文件处理设置 ==========
 vim.opt.autoread = true -- 自动读取外部修改
 vim.opt.hidden = true   -- 允许隐藏未保存的缓冲区

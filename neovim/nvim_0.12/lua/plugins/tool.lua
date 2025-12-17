@@ -2,7 +2,6 @@ vim.pack.add({
     { src = "https://github.com/windwp/nvim-autopairs" },
     { src = "https://github.com/NvChad/nvim-colorizer.lua" },
     { src = "https://github.com/folke/flash.nvim" },
-    { src = "https://github.com/tpope/vim-fugitive" },
 })
 -- 自动补全括号插件
 -- require("nvim-autopairs").setup()
