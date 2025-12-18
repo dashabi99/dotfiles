@@ -26,7 +26,8 @@ require("blink.cmp").setup({
     keymap = {
         ["<C-u>"] = { "scroll_documentation_up", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-        preset = "enter"
+        preset = "enter",
+        ["<CR>"] = { "select_and_accept", "fallback" },
     },
     appearance = {
         nerd_font_variant = "mono",
@@ -35,13 +36,15 @@ require("blink.cmp").setup({
     completion = {
         documentation = { auto_show = false },
     },
-    -- 命令模式自动显示补全
+    -- 命令模式不显示补全,按tab显示
     cmdline = {
         completion = {
             menu = {
-                auto_show = true,
-                -- border = "none",
+                auto_show = false,
             },
+        },
+        keymap = {
+            ["<CR>"] = { "select_and_accept", "fallback" },
         },
     },
     -- 编辑代码时自动显示信息
