@@ -23,6 +23,8 @@ require("plugins.lsp")
 require("plugins.tool")
 -- 模糊查找器
 require("plugins.snacks")
+-- 自带终端配置
+require("plugins.terminal")
 
 -- 卸载插件 命令模式：lua vim.pack.del({"lock.json的插件名字"})
 -- 更新全部插件 命令模式：lua vim.pack.update()

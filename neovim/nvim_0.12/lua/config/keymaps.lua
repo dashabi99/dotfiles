@@ -15,8 +15,8 @@ map("n", "<BS>", "<Cmd>wincmd h<CR>", { desc = "退格键也移动到左边窗�
 -- 窗口大小调整
 map("n", "<C-Up>", ":resize +2<CR>", { desc = "增加窗口高度" })
 map("n", "<C-Down>", ":resize -2<CR>", { desc = "减少窗口高度" })
-map("n", "<C-Left>", ":vertical resize +2<CR>", { desc = "减少窗口宽度" })
-map("n", "<C-Right>", ":vertical resize -2<CR>", { desc = "增加窗口宽度" })
+map("n", "<C-Left>", ":vertical resize +2<CR>", { desc = "增加窗口宽度" })
+map("n", "<C-Right>", ":vertical resize -2<CR>", { desc = "减少窗口宽度" })
 
 -- 默认的缓冲区导航
 -- map("n", "<S-h>", ":bprevious<CR>", { desc = "上一个缓冲区" })

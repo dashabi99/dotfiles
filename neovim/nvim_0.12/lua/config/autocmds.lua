@@ -34,24 +34,23 @@ autocmd("TextYankPost", {
 
 -- ========== 文件格式和清理 ==========
 
--- 自动删除尾随空格
-autocmd("BufWritePre", {
-    group = augroup("trim_whitespace", { clear = true }),
-    pattern = { "*.lua", "*.js", "*.ts", "*.py", "*.go", "*.rs", "*.c", "*.cpp", "*.h" },
-    desc = "保存前自动删除尾随空格",
-    callback = function()
-        -- 保存光标位置
-        local save_cursor = vim.fn.getpos(".")
-        local save_search = vim.fn.getreg("/")
-        -- 删除尾随空格
-        pcall(function()
-            vim.cmd([[keepjumps keeppatterns %s/\s\+$//e]])
-        end)
-        -- 恢复光标位置和搜索寄存器
-        vim.fn.setpos(".", save_cursor)
-        vim.fn.setreg("/", save_search)
-    end,
-})
+-- 自动删除尾随空格,不太需要，lsp格式化也能办到
+-- autocmd("BufWritePre", {
+--     group = augroup("trim_whitespace", { clear = true }),
+--     pattern = { "*.lua", "*.js", "*.ts", "*.py", "*.go", "*.rs", "*.c", "*.cpp", "*.h" },
+--     desc = "保存前自动删除尾随空格",
+--     callback = function()
+--         if vim.bo.buftype ~= "" then
+--             return
+--         end
+--         -- 保存光标位置
+--         local pos = vim.api.nvim_win_get_cursor(0)
+--         -- 删除尾随空格（不改 jumplist / 搜索模式）
+--         vim.cmd([[keepjumps keeppatterns %s/\s\+$//e]])
+--         -- 恢复光标位置
+--         vim.api.nvim_win_set_cursor(0, pos)
+--     end,
+-- })
 
 -- 注释不自动换行到下一行
 autocmd("BufEnter", {
@@ -63,29 +62,6 @@ autocmd("BufEnter", {
         vim.opt_local.formatoptions:remove({ "c", "r", "o" })
     end,
 })
-
--- ========== 外观和主题 ==========
-
--- 设置行号颜色
--- autocmd("BufEnter", {
---   group = augroup("line_number_colors", { clear = true }),
---   pattern = "*",
---   desc = "设置行号颜色",
---   callback = function()
---     -- 可以根据不同主题调整颜色
---     local colors = {
---       tokyonight = "#a9b1d6",
---       catppuccin = "#89b4fa",
---       gruvbox = "#928374",
---       default = "#a9b1d6",
---     }
---     -- 获取当前主题名称（如果可能的话）
---     local colorscheme = vim.g.colors_name or "default"
---     local color = colors[colorscheme] or colors.default
---     vim.api.nvim_set_hl(0, "LineNr", { fg = color, bg = "none" })
---     vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ff9e64", bg = "none", bold = true })
---   end,
--- })
 
 -- ========== 文件类型特定设置 ==========
 
@@ -149,12 +125,15 @@ autocmd("FileType", {
 })
 
 -- 自动调整窗口大小
-autocmd("VimResized", {
-    group = augroup("resize_splits", { clear = true }),
-    desc = "窗口大小改变时自动调整分割",
-    callback = function()
-        local current_tab = vim.fn.tabpagenr()
-        vim.cmd("tabdo wincmd =")
-        vim.cmd("tabnext " .. current_tab)
-    end,
-})
+-- autocmd("VimResized", {
+--     group = augroup("resize_splits", { clear = true }),
+--     desc = "窗口大小改变时自动调整分割",
+--     callback = function()
+--         local curtab = vim.api.nvim_get_current_tabpage()
+--         vim.cmd("tabdo wincmd =")
+--         -- 回到之前的 tab
+--         if vim.api.nvim_tabpage_is_valid(curtab) then
+--             vim.api.nvim_set_current_tabpage(curtab)
+--         end
+--     end,
+-- })
