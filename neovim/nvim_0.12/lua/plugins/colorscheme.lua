@@ -3,7 +3,7 @@ vim.pack.add({
 })
 
 require("catppuccin").setup({
-    -- term_colors = true,
+    term_colors = true,
     show_end_of_buffer = true, -- 是否显示缓冲区末尾多余行的 '~' 符号
     integrations = {
         treesitter = true,
