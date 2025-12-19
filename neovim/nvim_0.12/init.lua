@@ -1,10 +1,8 @@
 require("config.options")
 require("config.keymaps")
 require("config.autocmds")
--- unixchad的主题
-require("config.colors")
 -- 插件主题
--- require("plugins.colorscheme")
+require("plugins.colorscheme")
 
 -- ===插件===
 -- 图标
@@ -27,4 +25,4 @@ require("plugins.snacks")
 require("plugins.terminal")
 
 -- 卸载插件 命令模式：lua vim.pack.del({"lock.json的插件名字"})
--- 更新全部插件 命令模式：lua vim.pack.update()
+-- 更新全部插件 命令模式：lua vim.pack.update() 等更新完成，用:w来保存
