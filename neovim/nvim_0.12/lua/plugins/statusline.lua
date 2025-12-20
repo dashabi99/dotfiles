@@ -2,6 +2,27 @@ vim.pack.add({
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
 })
 
+-- 全局状态栏（laststatus = 3）
+vim.o.laststatus = 3
+
+----------------------------------------------------------------------
+-- 单独设置背景，状态栏，分割线颜色，与主题插件解耦
+----------------------------------------------------------------------
+--
+-- 当前窗口背景设为黑色
+vim.api.nvim_set_hl(0, "Normal", { bg = "#181818" })
+-- 非活动窗口背景设为灰色
+vim.api.nvim_set_hl(0, "NormalNC", { bg = "#222222" })
+
+-- 当前状态栏背景和非活动的状态栏背景(因为我是全局状态栏所有颜色是一样的)
+vim.api.nvim_set_hl(0, "StatusLine", { bg = "#9e95c7" })
+vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#9e95c7" })
+
+-- 窗口分割线颜色
+-- 简单粗暴：白线 + 黑背景
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ffffff", bg = "#111111" })
+vim.api.nvim_set_hl(0, "VertSplit", { fg = "#ffffff", bg = "#111111" })
+
 ----------------------------------------------------------------------
 -- 根据模式切换文件名高亮：Normal / Insert / Visual / Terminal / Command /
 ----------------------------------------------------------------------
@@ -44,6 +65,28 @@ vim.api.nvim_create_autocmd({ "ModeChanged", "WinEnter", "BufEnter" }, {
 
 -- 启动时先执行一次，确保 StlFilename 已有正确 link
 update_stl_filename_hl()
+
+-- 让 statusline 里「文件名后面的部分」统一用黑色前景
+local function setup_stl_rest_hl()
+    -- 取当前 StatusLine 的背景，这样不会破坏主题的背景颜色
+    local ok, stl = pcall(vim.api.nvim_get_hl, 0, { name = "StatusLine", link = false })
+    local bg = ok and stl.bg or nil
+
+    vim.api.nvim_set_hl(0, "StlRest", {
+        fg = "#111111", -- 黑色字体
+        bg = bg,        -- 背景沿用 StatusLine 的背景
+    })
+end
+
+local rest_grp = vim.api.nvim_create_augroup("StlRestColor", { clear = true })
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+    group = rest_grp,
+    callback = setup_stl_rest_hl,
+})
+
+-- 启动时先设置一次
+setup_stl_rest_hl()
 
 ----------------------------------------------------------------------
 -- statusline 各个组件
@@ -120,6 +163,8 @@ function Statusline.active()
         git(),
         " ",
         diagnostics(),
+        -- 从这里开始，全部用 StlRest（黑色字体）
+        "%#StlRest#",
         " ",
         "%h%m%r",
         " ",
@@ -129,6 +174,4 @@ function Statusline.active()
     }
 end
 
--- 全局状态栏（laststatus = 3）
-vim.o.laststatus = 3
 vim.o.statusline = "%!v:lua.Statusline.active()"
