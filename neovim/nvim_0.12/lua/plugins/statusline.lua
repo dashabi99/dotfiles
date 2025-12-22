@@ -8,11 +8,12 @@ vim.o.laststatus = 3
 ----------------------------------------------------------------------
 -- 单独设置背景，状态栏，分割线颜色，与主题插件解耦
 ----------------------------------------------------------------------
---
+
 -- 当前窗口背景设为黑色
 vim.api.nvim_set_hl(0, "Normal", { bg = "#181818" })
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "#2D2A2E" })
 -- 非活动窗口背景设为灰色
-vim.api.nvim_set_hl(0, "NormalNC", { bg = "#222222" })
+-- vim.api.nvim_set_hl(0, "NormalNC", { bg = "#222222" })
 
 -- 当前状态栏背景和非活动的状态栏背景(因为我是全局状态栏所有颜色是一样的)
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#9e95c7" })
@@ -20,8 +21,8 @@ vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#9e95c7" })
 
 -- 窗口分割线颜色
 -- 简单粗暴：白线 + 黑背景
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ffffff", bg = "#111111" })
-vim.api.nvim_set_hl(0, "VertSplit", { fg = "#ffffff", bg = "#111111" })
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ffffff" })
+vim.api.nvim_set_hl(0, "VertSplit", { fg = "#ffffff" })
 
 ----------------------------------------------------------------------
 -- 根据模式切换文件名高亮：Normal / Insert / Visual / Terminal / Command /
