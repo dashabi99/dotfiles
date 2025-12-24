@@ -9,11 +9,13 @@ vim.o.laststatus = 3
 -- 单独设置背景，状态栏，分割线颜色，与主题插件解耦
 ----------------------------------------------------------------------
 
--- 当前窗口背景设为黑色
-vim.api.nvim_set_hl(0, "Normal", { bg = "#181818" })
--- vim.api.nvim_set_hl(0, "Normal", { bg = "#2D2A2E" })
--- 非活动窗口背景设为灰色
--- vim.api.nvim_set_hl(0, "NormalNC", { bg = "#222222" })
+-- 当前窗口背景设为淡黑色
+-- 先获取当前 Normal 的高亮设置
+local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+-- 合并，保留原来的 fg 等字段，只覆盖 bg
+-- normal.bg = "#2D2A2E"
+normal.bg = "#181818"
+vim.api.nvim_set_hl(0, "Normal", normal)
 
 -- 当前状态栏背景和非活动的状态栏背景(因为我是全局状态栏所有颜色是一样的)
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#9e95c7" })
