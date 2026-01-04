@@ -289,38 +289,45 @@ backup() {
 # fzf 自带的 shell 集成
 [[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
 
+# 使用fnm来加载nodejs
+FNM_PATH="/home/mm/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "`fnm env`"
+fi
+
 # =========================================================
 # nvm 懒加载（减少启动时间）
 # =========================================================
-export NVM_DIR="$HOME/.nvm"
-
-# 方法一：直接加载nvm,会导致zsh启动有延迟
-# export NVM_COMPLETION=true
-# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-# [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-
-# 方法二：懒加载，在用nvm之前需要先使用定义的词加载一次
-load_nvm() {
-  [[ -s "$NVM_DIR/nvm.sh" ]]          && . "$NVM_DIR/nvm.sh"
-  [[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
-}
-
-nvm_lazy_load() {
-  if ! command -v nvm &>/dev/null; then
-    load_nvm
-  fi
-}
-
-# 需要 Node 环境的命令（自己可按需增减）
-nvm_commands=(node npm npx claude)
-for cmd in "${nvm_commands[@]}"; do
-  eval "
-  function $cmd() {
-    nvm_lazy_load
-    unset -f $cmd
-    $cmd \"\$@\"
-  }"
-done
+# export NVM_DIR="$HOME/.nvm"
+#
+# # 方法一：直接加载nvm,会导致zsh启动有延迟
+# # export NVM_COMPLETION=true
+# # [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# # [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+#
+# # 方法二：懒加载，在用nvm之前需要先使用定义的词加载一次
+# load_nvm() {
+#   [[ -s "$NVM_DIR/nvm.sh" ]]          && . "$NVM_DIR/nvm.sh"
+#   [[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
+# }
+#
+# nvm_lazy_load() {
+#   if ! command -v nvm &>/dev/null; then
+#     load_nvm
+#   fi
+# }
+#
+# # 需要 Node 环境的命令（自己可按需增减）
+# nvm_commands=(node npm npx claude)
+# for cmd in "${nvm_commands[@]}"; do
+#   eval "
+#   function $cmd() {
+#     nvm_lazy_load
+#     unset -f $cmd
+#     $cmd \"\$@\"
+#   }"
+# done
 
 # =========================================================
 # zinit 附加组件（对性能/功能的增强）
