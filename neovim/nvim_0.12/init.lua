@@ -3,6 +3,7 @@ require("config.keymaps")
 require("config.autocmds")
 -- 插件主题
 require("plugins.colorscheme")
+-- require("plugins.gruber-darker")
 
 -- ===插件===
 -- 图标
@@ -15,6 +16,8 @@ require("plugins.blink")
 require("plugins.oil")
 -- lsp
 require("plugins.lsp")
+-- 格式化
+require("plugins.autoformat")
 -- 语法高亮
 --require("plugins.treesitter")
 -- 一些小插件（自动括号，显示颜色，快速跳转）
