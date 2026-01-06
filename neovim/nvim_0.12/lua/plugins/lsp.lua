@@ -3,6 +3,8 @@ vim.pack.add({
     { src = 'https://github.com/neovim/nvim-lspconfig' }, -- LSP 配置
 })
 require('mason').setup()
+
+-- 文档网站：https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 vim.lsp.config('lua_ls', {
     settings = {
         Lua = {

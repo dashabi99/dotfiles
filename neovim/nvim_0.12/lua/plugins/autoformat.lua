@@ -4,7 +4,7 @@ vim.pack.add({
 require('conform').setup({
     formatters_by_ft = {
         lua = { 'stylua' },
-        python = { 'isort', 'black', 'yapf' },
+        python = { 'isort', 'yapf' },
         sh = { 'shfmt' },
         bash = { 'shfmt' },
         zsh = { 'shfmt' },
