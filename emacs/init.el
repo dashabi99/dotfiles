@@ -1,12 +1,19 @@
+;; 指导教程：https://pavinberg.github.io/emacs-book/zh/intro/
+
 ;;;; -------------------------
 ;;;; 基础性能与启动优化
 ;;;; -------------------------
-(setq gc-cons-threshold (* 64 1024 1024))  ; 启动阶段提高 GC 阈值
+;; 启动阶段提高 GC 阈值，减少频繁 GC 导致的卡顿
+(setq gc-cons-threshold (* 64 1024 1024)
+      gc-cons-percentage 0.6)
+;; 启动后恢复到更合理的阈值
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (setq gc-cons-threshold (* 16 1024 1024)))) ; 启动后恢复
-
-;; 减少启动时界面闪烁
+            (setq gc-cons-threshold (* 16 1024 1024)
+                  gc-cons-percentage 0.1)))
+;; 空闲时再 GC（更顺滑，避免编辑时卡顿）
+(run-with-idle-timer 5 t (lambda () (garbage-collect)))
+;; 减少启动时界面闪烁/噪音
 (setq inhibit-startup-message t
       inhibit-startup-screen t
       initial-scratch-message ";; Happy hacking with Emacs!\n\n")
@@ -14,9 +21,11 @@
 ;;;; -------------------------
 ;;;; 编码/中文友好
 ;;;; -------------------------
-(prefer-coding-system 'utf-8-unix)
-(set-language-environment "UTF-8")
-(setq-default buffer-file-coding-system 'utf-8-unix)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
 
 ;;;; -------------------------
 ;;;; UI：简洁但实用
@@ -24,68 +33,183 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(setq ring-bell-function 'ignore)      ; 关闭 Emacs 的“响铃/闪屏”提示
-(setq inhibit-startup-message t)       ; 关闭启动 Emacs 时的欢迎界面
+
+;; 关闭 Emacs 的“响铃/闪屏”提示（静音）
+(setq ring-bell-function #'ignore)
 
 ;; 显示列号、行号（编程模式更常用）
-(column-number-mode 1)
-; (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-(global-display-line-numbers-mode 1)     ; 在 Window 显示行号
+;; 显示 fill-column 指示线
+(global-display-fill-column-indicator-mode 1)
 
-;; 高亮当前行、括号匹配
-(global-hl-line-mode 1)
+;; 全局行号（如果你经常打开超大文件，建议改成只在 prog-mode 开启）
+(global-display-line-numbers-mode 1)
+(setq-default display-line-numbers-widen t)
+
+;; 显示行列号
+(setq column-number-mode t)
+
+;; 括号匹配
 (show-paren-mode 1)
+(setq blink-matching-paren nil)
+(setq show-paren-delay 0.2)
+(setq show-paren-highlight-openparen t)
+(setq show-paren-when-point-inside-paren t)
+
+;; 默认不折行（对结构化文本更直观）
+(setq-default truncate-lines t)
+
+;; 高亮当前行
+(global-hl-line-mode 1)
 
 ;; 更顺滑的滚动
 (setq scroll-step 1
       scroll-conservatively 10000
+      ;; 鼠标滚动：每次 2 行，按 shift 更慢
       mouse-wheel-scroll-amount '(2 ((shift) . 1))
       mouse-wheel-progressive-speed nil)
 
 ;; 主题（内置主题够稳定，后续可换 doom-themes 等）
-; (load-theme 'modus-vivendi t)
+;; (load-theme 'modus-vivendi t)
 
 ;;;; -------------------------
 ;;;; 更合理的编辑默认值
 ;;;; -------------------------
 (setq-default indent-tabs-mode nil) ; 用空格缩进更通用
 (setq-default tab-width 4)
-(electric-pair-mode t)  ; 自动补全括号
-(global-auto-revert-mode t) ; 文件变更自动刷新（配合 git 等很方便）
-(setq global-auto-revert-non-file-buffers t)
-(setq confirm-kill-emacs #'yes-or-no-p)   ; 在关闭 Emacs 前询问是否确认关闭，防止误触
-(delete-selection-mode t)          ; 选中文本后输入文本会替换文本（更符合我们习惯了的其它编辑器的逻辑）
+
+(electric-pair-mode 1)      ; 自动补全括号
+(delete-selection-mode 1)   ; 选中后输入会替换选区（更像现代编辑器）
+
+;; 文件变更自动刷新（配合 git 等很方便）
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t
+      auto-revert-verbose nil) ; 静默刷新，少打扰
+
 ;; y/n 代替 yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; 关闭 Emacs 前询问确认（此处也会变成 y/n，因为上面已替换 yes-or-no-p）
+(setq confirm-kill-emacs #'yes-or-no-p)
+
+;; 备份/自动保存：建议“集中存放”而不是彻底关闭（更安全且目录仍干净）
+;; 如果你强烈想完全关闭，把下面整个 let 块删掉，并恢复你原来的两行 setq 即可。
+; (let ((backup-dir (expand-file-name "var/backup/" user-emacs-directory))
+;       (autosave-dir (expand-file-name "var/autosave/" user-emacs-directory)))
+;   (make-directory backup-dir t)
+;   (make-directory autosave-dir t)
+;   (setq backup-directory-alist `(("." . ,backup-dir))
+;         auto-save-file-name-transforms `((".*" ,autosave-dir t))
+;         auto-save-default t
+;         backup-by-copying t
+;         delete-old-versions t
+;         kept-new-versions 6
+;         kept-old-versions 2
+;         version-control t))
+(setq backup-inhibited t)
+(setq auto-save-default nil)
+
+;; 文件末尾空行可见（便于发现末尾多余空行）
+(setq-default indicate-empty-lines t)
+
+;; 输入时隐藏鼠标指针（避免挡住文字）
+(setq make-pointer-invisible t)
+
+;; 与系统剪贴板互通
+(setq select-enable-clipboard t)
+;; 从剪贴板请求时优先 UTF8
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+;; 粘贴位置以文本光标为准（而不是鼠标位置）
+(setq mouse-yank-at-point t)
+
 ;;;; -------------------------
-;;;; 包管理：use-package (腾讯镜像)
+;;;; 包管理：use-package (USTC 镜像)
 ;;;; -------------------------
+
+;; 避免 Emacs 启动时自动重复初始化包系统（我们手动 package-initialize）
+(setq package-enable-at-startup nil)
+
 (require 'package)
-(setq package-archives
-      '(("gnu"    . "https://mirrors.ustc.edu.cn/elpa/gnu/")
-        ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")
-        ("melpa"  . "https://mirrors.ustc.edu.cn/elpa/melpa/")))
-;; 第一次需要：拉取仓库索引
-(unless package-archive-contents
-  (package-refresh-contents))
-;; 自举安装 use-package
+(add-to-list 'package-archives '("gnu"    . "https://mirrors.ustc.edu.cn/elpa/gnu/") t)
+(add-to-list 'package-archives '("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/") t)
+(add-to-list 'package-archives '("melpa"  . "https://mirrors.ustc.edu.cn/elpa/melpa/") t)
+
+(package-initialize)
+
+;; 自动安装 use-package（仅首次需要联网刷新）
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
-;; 运行时加载（建议直接 require，最省心）
-(require 'use-package)
+
+(eval-when-compile
+  (require 'use-package))
+
+;; use-package 默认行为：自动安装、默认延迟加载
 (setq use-package-always-ensure t)
+(setq use-package-always-defer t)
 
 ;; 插件主题
 (use-package gruber-darker-theme
-  :ensure t
+  :demand t
   :config
   ;; 启用主题（深色）
   (load-theme 'gruber-darker t))
 
+;; 更好的跳转到行首和行尾
+(use-package mwim
+ :ensure t
+ :bind
+ ("C-a" . mwim-beginning-of-code-or-line)
+ ("C-e" . mwim-end-of-code-or-line))
+
+;; 当有三个分割窗口时，显示数字跳转
+(use-package ace-window
+ :ensure t
+ :bind (("C-x o" . 'ace-window)))
+
+;; 不同颜色标记多级括号
+(use-package rainbow-delimiters
+ :ensure t
+ :hook (prog-mode . rainbow-delimiters-mode))
+
+;; 显示图标 (重启 Emacs 后安装字体： M-x all-the-icons-install-fonts)
+(use-package all-the-icons
+  :if (display-graphic-p))
+
 ;;;; -------------------------
 ;;;; 一些常用快捷键/小工具
 ;;;; -------------------------
+;; 自定义两个函数
+;; Faster move cursor
+(defun next-ten-lines()
+ "Move cursor to next 10 lines."
+ (interactive)
+ (next-line 10))
+
+(defun previous-ten-lines()
+ "Move cursor to previous 10 lines."
+ (interactive)
+ (previous-line 10))
+;; 绑定到快捷键
+(global-set-key (kbd "M-n") 'next-ten-lines)      ; 光标向下移动 10 行
+(global-set-key (kbd "M-p") 'previous-ten-lines)    ; 光标向上移动 10 行
+
+(global-set-key (kbd "M-w") 'kill-region)       ; 设置M-w 为剪切
+(global-set-key (kbd "C-w") 'kill-ring-save)      ; 设置C-w 为复制
+(global-set-key (kbd "M-m") 'move-beginning-of-line)  ; M-m 为到真正的行首
+(global-set-key (kbd "C-x ;") 'comment-or-uncomment-region) ; 为选中的代码加注释/去注释
+
+;; C-= 放大，C-- 缩小，C-0 重置（内置 text-scale：对“当前 buffer”生效）
+(global-set-key (kbd "C-=") #'text-scale-increase)
+(global-set-key (kbd "C--") #'text-scale-decrease)
+(global-set-key (kbd "C-0")
+                (lambda () (interactive) (text-scale-set 0)))
+
+;; Ctrl + 鼠标滚轮缩放（不同 GUI/后端可能事件名不同，这里都绑上）
+(global-set-key (kbd "<C-mouse-4>") #'text-scale-increase)
+(global-set-key (kbd "<C-mouse-5>") #'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") #'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") #'text-scale-decrease)
+
 ;; F5 重新加载 init.el
 (defun my/reload-init ()
   "Reload init.el."
@@ -94,11 +218,14 @@
   (message "Reloaded: %s" user-init-file))
 (global-set-key (kbd "<f5>") #'my/reload-init)
 
-;; 更友好的帮助窗口
+;; 更友好的帮助窗口：打开 help 后自动选中 help 窗口
 (setq help-window-select t)
 
 ;; ----------------------------
 ;; 字体: English + Chinese fallback
+;; ----------------------------
+;; ----------------------------
+;; 字体: English + Chinese fallback（稳定版）
 ;; ----------------------------
 (defun my/setup-fonts ()
   "Set English/monospace font and Chinese font fallback."
@@ -119,9 +246,11 @@
 (add-hook 'after-make-frame-functions
           (lambda (_frame) (my/setup-fonts)))
 
-;;; init.el ends here
-(custom-set-variables
- '(package-selected-packages nil))
-(custom-set-faces
- )
+;;;; -------------------------
+;;;; Custom：把 customize 写入的内容放到单独文件，避免污染 init.el
+;;;; -------------------------
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
+
 (provide 'init)
+;;; init.el ends here
