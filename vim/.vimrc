@@ -24,10 +24,13 @@ set smartcase           " 在搜索模式中智能处理大小写
 "set background=dark     " 使用暗色背景
 set wildmenu            " 启用命令补全菜单
 set showmode            " 显示模式
+set laststatus=2       " 始终显示状态栏
 set showcmd          " 显示命令
 "set mouse=a          " 启用鼠标支持
 set backspace=indent,eol,start " 修复退格键行为
-set clipboard=unnamedplus   " 使用系统剪贴板（需要 Vim 支持 +clipboard）
+" 使用系统剪贴板（需要 Vim 支持 +clipboard）,下面这两个哪个能用用哪个
+"set clipboard=unnamedplus   
+set clipboard=unnamed
 
 " 编码设置
 set encoding=utf-8
@@ -43,14 +46,16 @@ set ttimeoutlen=100    " 键码序列超时时间（毫秒）
                       " 注意：-1 会导致使用timeoutlen的值，造成延迟
 
 " 按键映射
+
 " 设置 <Leader> 键为空格键
 let mapleader = " "
 " 插入模式下将 'jk' 映射为 'Esc'
 inoremap jk <Esc>
 " 命令行模式下 'jk' 映射为 'Ctrl-c'
 cnoremap jk <C-c>
-" 普通模式按 '<Leader>b' 打开缓冲区列表并进入缓冲区选择命令
-nnoremap <Leader>b :buffers<CR>:b<Space>
+" 普通模式下 'vv' 映射为 'Ctrl-v'
+nnoremap vv <C-v>
+
 " 窗口导航映射
 nnoremap <C-h> <C-w>h " 左
 nnoremap <C-j> <C-w>j " 下
@@ -63,18 +68,29 @@ nnoremap <C-Left>  :vertical resize -2<CR>
 nnoremap <C-Right> :vertical resize +2<CR>
 " 清除搜索高亮
 nnoremap <Leader>nh :nohlsearch<CR>
+
+" 打开一个新的空白标签页
+nnoremap <leader>tn :tabnew 
 " 映射到上一个标签页
 nnoremap <S-h> :tabp<CR>
 " 映射到下一个标签页
 nnoremap <S-l> :tabn<CR>
+
+" 普通模式按 '<Leader>bb' 打开缓冲区列表并进入缓冲区选择命令
+nnoremap <Leader>bb :buffers<CR>:b<Space>
 " 删除当前缓冲区
 nnoremap <leader>bd :bdelete<CR>
-" 打开一个新的空白标签页
-nnoremap <leader>tn :tabnew 
 " 切换到上一个缓冲区
 nnoremap <leader>bp :bprevious<CR>
 " 切换到下一个缓冲区
 nnoremap <leader>bn :bnext<CR>
+
+" 更好的左右缩进
+vnoremap < <gv
+vnoremap > >gv
+" 上下移动文本
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 " 文件检测
 filetype on          " 启用文件类型检测
