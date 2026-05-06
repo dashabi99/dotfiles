@@ -1,31 +1,28 @@
-require("config.options")
-require("config.keymaps")
-require("config.autocmds")
+require('config.options')
+require('config.keymaps')
+require('config.autocmds')
 -- 插件主题
-require("plugins.colorscheme")
--- require("plugins.gruber-darker")
+require('plugins.colorscheme')
 
 -- ===插件===
 -- 图标
-require("plugins.nvim-web-devicons")
+require('plugins.nvim-web-devicons')
 -- 状态栏
-require("plugins.statusline")
--- 补全
-require("plugins.blink")
+require('plugins.statusline')
+-- 代码补全 先加载blink 再加载lsp
+require('plugins.blink')
 -- 文件管理器
-require("plugins.oil")
--- lsp
-require("plugins.lsp")
--- 格式化
-require("plugins.autoformat")
+require('plugins.oil')
+-- lsp + 格式化
+require('plugins.lsp')
 -- 语法高亮
 --require("plugins.treesitter")
--- 一些小插件（自动括号，显示颜色，快速跳转）
-require("plugins.tool")
+-- 一些小插件（mini系列插件，显示颜色，快速跳转）
+require('plugins.tool')
 -- 模糊查找器
-require("plugins.snacks")
+require('plugins.snacks')
 -- 自带终端配置
-require("plugins.terminal")
+require('plugins.terminal')
 
 -- 卸载插件 命令模式：lua vim.pack.del({"lock.json的插件名字"})
 -- 更新全部插件 命令模式：lua vim.pack.update() 等更新完成，用:w来保存

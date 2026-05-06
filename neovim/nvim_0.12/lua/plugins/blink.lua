@@ -1,42 +1,42 @@
 vim.pack.add({
     -- snippet 引擎
-    { src = "https://github.com/L3MON4D3/LuaSnip" },
+    { src = 'https://github.com/L3MON4D3/LuaSnip' },
     -- snippet 集合（friendly-snippets）
-    { src = "https://github.com/rafamadriz/friendly-snippets" },
+    { src = 'https://github.com/rafamadriz/friendly-snippets' },
     -- 补全引擎
-    { src = "https://github.com/saghen/blink.cmp",            version = vim.version.range("1.*") },
+    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.*') },
 })
 
 -- 先配置 LuaSnip 和 friendly-snippets
-local ok_luasnip, luasnip = pcall(require, "luasnip")
+local ok_luasnip, luasnip = pcall(require, 'luasnip')
 if ok_luasnip then
     -- 加载 friendly-snippets（VSCode 风格）
-    require("luasnip.loaders.from_vscode").lazy_load()
+    require('luasnip.loaders.from_vscode').lazy_load()
 
     -- 可选：LuaSnip 一些基础设置
     luasnip.config.set_config({
         history = true,
-        updateevents = "TextChanged,TextChangedI",
+        updateevents = 'TextChanged,TextChangedI',
         enable_autosnippets = true,
     })
 end
 
 -- 再配置 blink.cmp
-require("blink.cmp").setup({
+require('blink.cmp').setup({
     keymap = {
-        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-        preset = "enter",
-        ["<CR>"] = { "select_and_accept", "fallback" },
+        ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
+        preset = 'enter',
+        ['<CR>'] = { 'select_and_accept', 'fallback' },
     },
     appearance = {
-        nerd_font_variant = "mono",
+        nerd_font_variant = 'mono',
     },
     -- 不自动显示当前函数的信息，按K查看
     completion = {
         documentation = { auto_show = false },
     },
-    -- 命令模式不显示补全,按tab显示
+    -- 命令模式不自动显示补全，tab显示，回车确认
     cmdline = {
         completion = {
             menu = {
@@ -44,20 +44,21 @@ require("blink.cmp").setup({
             },
         },
         keymap = {
-            ["<CR>"] = { "select_and_accept", "fallback" },
+            ['<CR>'] = { 'select_and_accept', 'fallback' },
+            ['<Tab>'] = { 'show', 'select_next', 'fallback' },
         },
     },
     -- 编辑代码时自动显示信息
     signature = {
-        enabled = true
+        enabled = true,
     },
     -- 使用 LuaSnip 预设
     snippets = {
-        preset = "luasnip",
+        preset = 'luasnip',
     },
     sources = {
         -- 'snippets' 源会从 LuaSnip 中取片段
-        default = { "lsp", "path", "snippets", "buffer" },
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
     },
-    fuzzy = { implementation = "lua" },
+    fuzzy = { implementation = 'lua' },
 })

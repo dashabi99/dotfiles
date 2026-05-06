@@ -32,26 +32,6 @@ autocmd('TextYankPost', {
     end,
 })
 
--- ========== 文件格式和清理 ==========
-
--- 自动删除尾随空格,不太需要，lsp格式化也能办到
--- autocmd("BufWritePre", {
---     group = augroup("trim_whitespace", { clear = true }),
---     pattern = { "*.lua", "*.js", "*.ts", "*.py", "*.go", "*.rs", "*.c", "*.cpp", "*.h" },
---     desc = "保存前自动删除尾随空格",
---     callback = function()
---         if vim.bo.buftype ~= "" then
---             return
---         end
---         -- 保存光标位置
---         local pos = vim.api.nvim_win_get_cursor(0)
---         -- 删除尾随空格（不改 jumplist / 搜索模式）
---         vim.cmd([[keepjumps keeppatterns %s/\s\+$//e]])
---         -- 恢复光标位置
---         vim.api.nvim_win_set_cursor(0, pos)
---     end,
--- })
-
 -- 注释不自动换行到下一行
 autocmd('BufEnter', {
     group = augroup('comment_format', { clear = true }),
@@ -123,17 +103,3 @@ autocmd('FileType', {
         vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true })
     end,
 })
-
--- 自动调整窗口大小
--- autocmd("VimResized", {
---     group = augroup("resize_splits", { clear = true }),
---     desc = "窗口大小改变时自动调整分割",
---     callback = function()
---         local curtab = vim.api.nvim_get_current_tabpage()
---         vim.cmd("tabdo wincmd =")
---         -- 回到之前的 tab
---         if vim.api.nvim_tabpage_is_valid(curtab) then
---             vim.api.nvim_set_current_tabpage(curtab)
---         end
---     end,
--- })

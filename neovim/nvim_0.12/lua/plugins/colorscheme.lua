@@ -1,8 +1,8 @@
 vim.pack.add({
-    { src = "https://github.com/catppuccin/nvim" },
+    { src = 'https://github.com/catppuccin/nvim' },
 })
 
-require("catppuccin").setup({
+require('catppuccin').setup({
     term_colors = true,
     show_end_of_buffer = true, -- 是否显示缓冲区末尾多余行的 '~' 符号
     integrations = {
@@ -16,13 +16,27 @@ require("catppuccin").setup({
 })
 
 -- 设置 colorscheme
-vim.cmd.colorscheme("catppuccin")
+vim.cmd.colorscheme('catppuccin')
 
--- vim.pack.add({
---     { src = "https://github.com/blazkowolf/gruber-darker.nvim" },
--- })
---
--- -- 设置 colorscheme
--- vim.cmd.colorscheme("gruber-darker")
--- -- 设置gruber-darker的注释颜色
--- vim.api.nvim_set_hl(0, "Comment", { fg = "#95a99f", italic = true })
+-- 透明背景 和 StatusLine有冲突
+-- local function set_transparent() -- set UI component to transparent
+--   local groups = {
+--     "Normal",
+--     "NormalNC",
+--     "EndOfBuffer",
+--     "NormalFloat",
+--     "FloatBorder",
+--     "SignColumn",
+--     "StatusLine",
+--     "StatusLineNC",
+--     "TabLine",
+--     "TabLineFill",
+--     "TabLineSel",
+--     "ColorColumn",
+--   }
+--   for _, g in ipairs(groups) do
+--     vim.api.nvim_set_hl(0, g, { bg = "none" })
+--   end
+--   vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none", fg = "#767676" })
+-- end
+-- set_transparent()
