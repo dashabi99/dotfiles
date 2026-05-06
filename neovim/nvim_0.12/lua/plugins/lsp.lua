@@ -98,8 +98,21 @@ require('conform').setup({
         bash = { 'shfmt' },
         zsh = { 'shfmt' },
         json = { 'fixjson' },
-        c = { 'clangfmt' },
-        cpp = { 'clangfmt' },
+        c = { 'clang_format' },
+        cpp = { 'clang_format' },
+    },
+    formatters = {
+        isort = {
+            inherit = false,
+            command = 'isort',
+            args = {
+                '--stdout',
+                '--filename',
+                '$FILENAME',
+                '-',
+            },
+            stdin = true,
+        },
     },
     format_on_save = {
         timeout_ms = 500,
