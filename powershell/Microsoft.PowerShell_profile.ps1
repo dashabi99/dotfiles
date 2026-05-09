@@ -1,6 +1,11 @@
 # 查看目前使用的 Profile路径 echo $PROFILE
 # 直接用記事本编辑 notepad $PROFILE
 
+# 安装插件
+# （Install-Module Terminal-Icons -Scope CurrentUser）
+# （Install-Module posh-git -Scope CurrentUser）
+# （Install-Module PSReadLine -Scope CurrentUser -Force）
+# （Install-Module PSFzf -Scope CurrentUser）
 # 更新模块插件 Update-Module
 
 # 命令行美化
@@ -17,13 +22,13 @@ function open {
     Invoke-Item $Path
 }
 
-# 终端图标（先安装 Install-Module Terminal-Icons -Scope CurrentUser）
-Import-Module Terminal-Icons
+# 终端图标 耗时不用
+# Import-Module Terminal-Icons
 
-# Git 提示 先安装 Install-Module posh-git -Scope CurrentUser
-Import-Module posh-git
+# Git 提示  耗时不用
+# Import-Module posh-git
 
-# PSReadLine 先安装（用自带的cmd下载） Install-Module PSReadLine -Scope CurrentUser -Force
+# PSReadLine 先安装（用自带的cmd下载）
 Import-Module PSReadLine
 # 使用win编辑模式
 #Set-PSReadLineOption -EditMode Windows
@@ -53,6 +58,7 @@ Set-PsFzfOption `
             -PSReadlineChordReverseHistory 'Ctrl+r' `
             -PSReadlineChordProvider 'Ctrl+f'
 
+# yazi快捷键
 function yy {
 	$tmp = (New-TemporaryFile).FullName
 	yazi.exe @args --cwd-file="$tmp"
@@ -62,5 +68,3 @@ function yy {
 	}
 	Remove-Item -Path $tmp
 }
-
-
