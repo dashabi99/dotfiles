@@ -10,7 +10,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "conform.nvim": {
-      "rev": "dca1a190aa85f9065979ef35802fb77131911106",
+      "rev": "18aeab3d63d350dcf44d64c462cc489a3412af40",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "flash.nvim": {
@@ -30,7 +30,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "60b5aaac2f0465d67699702e76b9baebf52cb42f",
+      "rev": "264b5c8fc6e82212af0dc5c345145cfa916efeb6",
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "nvim": {
@@ -46,7 +46,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-web-devicons": {
-      "rev": "2795c26c916bb3c57dde308b82be51971fa92747",
+      "rev": "7d8dad2c837fcdf2e65997e68657c1a21c568074",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
