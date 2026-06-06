@@ -26,8 +26,7 @@ vim.o.laststatus = 3
 -- 先获取当前 Normal 的高亮设置
 local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
 -- 合并，保留原来的 fg 等字段，只覆盖 bg
--- normal.bg = '#2D2A2E'
-normal.bg = '#181818'
+normal.bg = '#232a2e'
 -- normal.bg = 'none'
 vim.api.nvim_set_hl(0, 'Normal', normal)
 
