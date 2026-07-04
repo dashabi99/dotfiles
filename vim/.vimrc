@@ -28,6 +28,7 @@ set showcmd
 # 显示模式
 set showmode
 # 始终显示状态栏
+#set statusline+=%f\ %h%m%r%=\ %-16.(%)\ %c[%l/%L\ %P]
 set laststatus=2
 # 显示括号匹配
 set showmatch
@@ -114,7 +115,7 @@ set updatetime=300
 set lazyredraw
 
 # 使用系统剪贴板（需要 Vim 支持 +clipboard）,下面这两个哪个能用用哪个
-# set clipboard=unnamedplus   
+# set clipboard=unnamedplus
 set clipboard=unnamed
 
 set autoread
@@ -192,6 +193,10 @@ endif
 
 set background=dark
 colorscheme desert
+
+# 高亮行尾空格
+highlight TrailingSpace ctermbg=gray guibg=gray
+var trailing_space_match = matchadd('TrailingSpace', '\s\+$')
 
 # ============================================================
 # Leader 键
@@ -425,8 +430,8 @@ vnoremap < <gv
 vnoremap > >gv
 
 # 上下移动选中文本
-vnoremap J <ScriptCmd>move '>+1<CR>gv=gv
-vnoremap K <ScriptCmd>move '<-2<CR>gv=gv
+xnoremap <silent> J :move '>+1<CR>gv=gv
+xnoremap <silent> K :move '<-2<CR>gv=gv
 
 # ============================================================
 # 编辑体验优化
