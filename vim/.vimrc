@@ -193,6 +193,7 @@ endif
 
 set background=dark
 colorscheme desert
+#colorscheme catppuccin
 
 # 高亮行尾空格
 highlight TrailingSpace ctermbg=gray guibg=gray
@@ -216,7 +217,8 @@ cnoremap jk <C-c>
 # 普通模式下 vv 进入可视块模式
 nnoremap vv <C-v>
 # 清除搜索高亮
-nnoremap <silent> <Leader>nh <ScriptCmd>nohlsearch<CR>
+#nnoremap <silent> <Leader>nh <ScriptCmd>nohlsearch<CR>
+nnoremap <silent> <Esc> <ScriptCmd>nohlsearch<CR>
 
 # ============================================================
 # 窗口导航
