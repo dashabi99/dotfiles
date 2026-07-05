@@ -192,7 +192,8 @@ if has('termguicolors')
 endif
 
 set background=dark
-colorscheme desert
+#colorscheme desert
+colorscheme green
 #colorscheme catppuccin
 
 # 高亮行尾空格
