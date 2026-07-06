@@ -7,8 +7,8 @@ local act = wezterm.action
 -- 颜色和主题配置
 -- ============================================================================
 -- -- 第一种方法(单独设置全局主题，没有光标及滚动条的颜色修改)
--- config.color_scheme = "tokyonight_moon"
--- config.color_scheme = "Ubuntu"
+--config.color_scheme = "Catppuccin Mocha"
+--config.color_scheme = "Ubuntu"
 
 -- 第二种方法
 config.colors = {
@@ -21,8 +21,7 @@ config.colors = {
 	cursor_bg = "#FBB829",
 	cursor_border = "#FBB829",
 }
--- Set background to same color as neovim(nvim_theme="tjdevries/colorbuddy.nvim")
-config.colors.background = "#111111"
+config.colors.background = "#222222"
 
 -- 第三种方法
 -- config.color_scheme = "Ubuntu"
@@ -43,8 +42,8 @@ config.colors.background = "#111111"
 -- 窗口外观配置
 -- ============================================================================
 -- 窗口装饰 -- 看自己喜欢设置
-config.window_decorations = "TITLE | RESIZE"
--- config.window_decorations = "TITLE | RESIZE"
+--config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
+--config.window_decorations = "TITLE | RESIZE"
 -- 不要标题栏，可以改成"RESIZE",想要标题栏和边框，可以改成"INTEGRATED_BUTTONS | RESIZE"
 -- 如果你设置的是INTEGRATED_BUTTONS | RESIZE，就把下面这些全部打开
 -- config.integrated_title_button_alignment = "Right"
@@ -60,7 +59,7 @@ config.show_tab_index_in_tab_bar = true
 -- 只有一个窗口标题时也不隐藏
 config.hide_tab_bar_if_only_one_tab = false
 -- 标签页最大宽度，默认16
-config.tab_max_width = 30
+--config.tab_max_width = 30
 -- 窗口填充和样式，右边给多一点，因为有滚动条
 config.window_padding = {
 	left = 8,
@@ -79,49 +78,50 @@ config.hide_mouse_cursor_when_typing = true
 config.scrollback_lines = 10000
 
 -- 渲染设置-gpu -- (OpenGL可能稳定一点)
--- config.front_end = "OpenGL"
-config.front_end = "WebGpu"
-config.webgpu_power_preference = "HighPerformance"
-config.webgpu_force_fallback_adapter = false
+config.front_end = "OpenGL"
+--config.front_end = "WebGpu"
+--config.webgpu_power_preference = "HighPerformance"
+--config.webgpu_force_fallback_adapter = false
 -- 可以选择打开或者关闭，感觉没区别，就是剪切板有点难受
 -- config.enable_wayland = false
 
 --添加动画fps,以及光标设置
-config.animation_fps = 120
-config.max_fps = 120
--- 启动kitty键盘协议，linux运行正常，在win上导致在wezterm里运行vim/nvim时，esc没反应和打一个中文字没反应，多个字正常.还是禁用吧也没快多少
--- config.enable_kitty_keyboard = true
-config.term = "xterm-256color"
+config.animation_fps = 1
+config.max_fps = 60
 
--- 设置默认工作区名称为"Normal"
-config.default_workspace = "Normal"
+config.term = "xterm-256color"
+--config.term = "wezterm"
 
 -- ============================================================================
 -- 字体配置
 -- ============================================================================
 -- 当第一个字体没安装时，使用第二个字体
-config.font = wezterm.font_with_fallback({
-	{ family = "Ioskeley Mono", weight = "Regular" },
-	{ family = "LXGW WenKai Mono", weight = "Regular" },
-	-- { family = "Maple Mono NF CN", weight = "Regular" },
-	-- { family = "FiraCode Nerd Font", weight = "Regular" },
-	-- { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
-	-- { family = "JetBrains Mono", weight = "Medium" },
-	"Noto Color Emoji",
-})
+--config.font = wezterm.font("UbuntuMono Nerd Font")
+--config.font = wezterm.font("Consolas")
+config.font_size = 15
+config.line_height = 1.2
+--config.font = wezterm.font_with_fallback({
+--    { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
+--	--{ family = "Ioskeley Mono", weight = "Regular" },
+--	--{ family = "LXGW WenKai Mono", weight = "Regular" },
+--	-- { family = "Maple Mono NF CN", weight = "Regular" },
+--	-- { family = "FiraCode Nerd Font", weight = "Regular" },
+--	-- { family = "JetBrains Mono", weight = "Medium" },
+--	--"Noto Color Emoji",
+--})
 -- 为特定Unicode范围指定字体；
-config.font_rules = {
-	-- Nerd Font 符号范围
-	{
-		intensity = "Normal",
-		italic = false,
-		font = wezterm.font_with_fallback({
-			"Symbols Nerd Font Mono",
-			-- "Maple Mono NF CN",
-			-- "FiraCode Nerd Font",
-		}),
-	},
-}
+--config.font_rules = {
+--	-- Nerd Font 符号范围
+--	{
+--		intensity = "Normal",
+--		italic = false,
+--		font = wezterm.font_with_fallback({
+--			"Symbols Nerd Font Mono",
+--			-- "Maple Mono NF CN",
+--			-- "FiraCode Nerd Font",
+--		}),
+--	},
+--}
 
 -- 字体大小和行高
 config.font_size = 13
@@ -136,9 +136,6 @@ config.initial_rows = 35 -- 增加行数
 -- ============================================================================
 config.launch_menu = {
 	{ label = "杭州台架", args = { "ssh", "mm@10.8.104.67" } },
-	{ label = "lhuas_ipc_X1", args = { "ssh", "mm@192.168.30.200" } },
-	{ label = "lhuas_ipc_X2", args = { "ssh", "mm@192.168.195.200" } },
-	{ label = "zls_ipc", args = { "ssh", "mm@192.168.195.199" } },
 	-- -- 添加本地会话选项
 	-- { label = "本地 Zsh", args = { "zsh", "-l" } },
 	-- { label = "本地 Bash", args = { "bash", "-l" } },
@@ -157,21 +154,12 @@ config.inactive_pane_hsb = {
 -- 打开滚动条
 config.enable_scroll_bar = true
 -- 优化状态更新频率
-config.status_update_interval = 1000
+--config.status_update_interval = 1000
 
 --背景透明度
--- config.window_background_opacity = 0.9
+--config.window_background_opacity = 0.9
 --亚力克模糊
--- config.macos_window_background_blur = 10
---把自己的壁纸放到这里，设置背景图片
-config.background = {
-	{
-		source = {
-			--   File = 'D:/壁纸/wallhaven-858lz1_2560x1600.png',
-			File = "/home/mm/dotfiles/pictures/001.jpg",
-		},
-	},
-}
+--config.macos_window_background_blur = 10
 
 -- ============================================================================
 -- 定义多系统都需要的变量,避免重复
@@ -198,270 +186,6 @@ elseif os_info.is_mac then
 	-- macOS 特定设置
 	-- config.macos_window_background_blur = 20
 end
-
--- 提取目录/路径最后一个名字(兼容win和linux识别)
-local function basename(s)
-	return string.gsub(s, "(.*[/\\])(.*)", "%2")
-end
-
--- ============================================================================
--- 图标和符号定义
--- ============================================================================
--- 箭头图标
-local SOLID_LEFT_ARROW = utf8.char(0xe0ba)
-local SOLID_LEFT_MOST = utf8.char(0x2588)
-local SOLID_RIGHT_ARROW = utf8.char(0xe0bc)
-
--- 进程图标
-local UNKNOWN = utf8.char(0xebc3)
-local ADMIN_WIN = utf8.char(0xf49c)
-local CMD = utf8.char(0xebc4)
-local PWSH = utf8.char(0xe86c)
-local NVIM = utf8.char(0xe6ae)
-local VIM_WIN = utf8.char(0xe62b)
-local VIM_LINUX = utf8.char(0xe7c5)
-local FZF = utf8.char(0xf021e)
-local PYTHON = utf8.char(0xe73c)
-local TMUX = utf8.char(0xebc8)
-local SSH = utf8.char(0xeb39)
-local ZSH = utf8.char(0xe760)
-local YAZI = utf8.char(0xf01e5) -- 终端文件管理器yazi图标
-local SCP = utf8.char(0xf09e) -- scp 的图标
-local CLAUDE = utf8.char(0xf0a1e) -- claude code图标
-local ZOOM = "🔍" -- 放大镜图标
-local GIT = utf8.char(0xe702) -- git图标
-local SUP_IDX = {
-	"¹",
-	"²",
-	"³",
-	"⁴",
-	"⁵",
-	"⁶",
-	"⁷",
-	"⁸",
-	"⁹",
-	"¹⁰",
-	"¹¹",
-	"¹²",
-	"¹³",
-	"¹⁴",
-	"¹⁵",
-	"¹⁶",
-	"¹⁷",
-	"¹⁸",
-	"¹⁹",
-	"²⁰",
-}
-local SUB_IDX = {
-	"₁",
-	"₂",
-	"₃",
-	"₄",
-	"₅",
-	"₆",
-	"₇",
-	"₈",
-	"₉",
-	"₁₀",
-	"₁₁",
-	"₁₂",
-	"₁₃",
-	"₁₄",
-	"₁₅",
-	"₁₆",
-	"₁₇",
-	"₁₈",
-	"₁₉",
-	"₂₀",
-}
-
--- ============================================================================
--- 标签页的图标和标题设置
--- ============================================================================
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	local edge_background = "#121212"
-	local background = "#4E4E4E"
-	local foreground = "#1C1B19"
-	local dim_foreground = "#3A3A3A"
-
-	if tab.is_active then
-		background = "#FBB829"
-		foreground = "#1C1B19"
-	elseif hover then
-		background = "#FF8700"
-		foreground = "#1C1B19"
-	end
-
-	local edge_foreground = background
-	local process_name = tab.active_pane.foreground_process_name
-	local pane_title = tab.active_pane.title
-	local exec_name = basename(process_name):gsub("%.exe$", "")
-	local title_with_icon
-
-	-- exec_name是从进程路径提取的短名称，pane_title是当前窗口标题,match是匹配,upper是转大写
-	-- 多种匹配方法
-	if exec_name == "zsh" or exec_name == "bash" then
-		title_with_icon = ZSH .. " " .. exec_name
-	elseif exec_name:match("nvim") then
-		title_with_icon = NVIM .. " nvim"
-	elseif exec_name:match("vim") then
-		title_with_icon = VIM_LINUX
-	elseif exec_name == "fzf" then
-		title_with_icon = FZF .. " " .. exec_name:upper()
-	elseif exec_name == "tmux" then
-		title_with_icon = TMUX .. " " .. exec_name
-	elseif exec_name:match("python") then
-		title_with_icon = PYTHON .. " " .. exec_name
-	elseif exec_name == "ssh" then
-		title_with_icon = SSH .. " " .. exec_name
-	elseif exec_name == "git" then
-		title_with_icon = GIT .. " " .. exec_name
-	elseif exec_name == "yazi" then
-		title_with_icon = YAZI .. " " .. exec_name
-	elseif exec_name == "scp" then
-		title_with_icon = SCP .. " " .. exec_name
-	elseif pane_title:match("claude") then
-		title_with_icon = CLAUDE .. " claude code"
-	elseif os_info.is_win and exec_name == "pwsh" then
-		-- 检查是否在运行vim
-		if exec_name:find("nvim") then
-			title_with_icon = NVIM .. " nvim"
-		elseif pane_title:match("VIM") then
-			title_with_icon = VIM_WIN .. " vim"
-		elseif pane_title:match("^Administrator: ") then
-			title_with_icon = PWSH .. " PowerShell " .. ADMIN_WIN
-		else
-			title_with_icon = PWSH .. " PowerShell"
-		end
-	elseif exec_name == "cmd" then
-		title_with_icon = CMD .. " " .. exec_name
-	else
-		title_with_icon = UNKNOWN .. " " .. pane_title
-	end
-
-	local left_arrow = SOLID_LEFT_ARROW
-	if tab.tab_index == 0 then
-		left_arrow = SOLID_LEFT_MOST
-	end
-	local id = SUB_IDX[tab.tab_index + 1]
-	local pid = SUP_IDX[tab.active_pane.pane_index + 1]
-	local title = " " .. wezterm.truncate_right(title_with_icon, max_width - 6) .. " "
-
-	return {
-		{ Attribute = { Intensity = "Bold" } },
-		{ Background = { Color = edge_background } },
-		{ Foreground = { Color = edge_foreground } },
-		{ Text = left_arrow },
-		{ Background = { Color = background } },
-		{ Foreground = { Color = foreground } },
-		{ Text = id },
-		{ Text = title },
-		{ Text = tab.active_pane.is_zoomed and (" " .. ZOOM .. " ") or "" },
-		{ Foreground = { Color = dim_foreground } },
-		{ Text = pid },
-		{ Background = { Color = edge_background } },
-		{ Foreground = { Color = edge_foreground } },
-		{ Text = SOLID_RIGHT_ARROW },
-		{ Attribute = { Intensity = "Normal" } },
-	}
-end)
-
--- ============================================================================
--- 状态栏配置
--- ============================================================================
-wezterm.on("update-status", function(window, pane)
-	-- 工作区状态
-	local stat = window:active_workspace()
-	local stat_color = "#f7768e"
-
-	if window:active_key_table() then
-		stat = window:active_key_table()
-		stat_color = "#7dcfff"
-	elseif window:leader_is_active() then
-		stat = "Leader"
-		stat_color = "#bb9af7"
-	end
-
-	-- 当前进程和目录
-	local cmd = pane:get_foreground_process_name()
-	cmd = cmd and basename(cmd) or ""
-
-	local cwd = pane:get_current_working_dir()
-	local cwd_text = ""
-
-	if cmd:find("ssh") then
-		cwd_text = "🌐 Remote"
-	elseif cmd:find("tmux") then
-		cwd_text = "🔧 Tmux"
-	elseif cwd then
-		if type(cwd) == "userdata" then
-			local file_path = cwd.file_path or cwd.path or ""
-			cwd_text = basename(file_path)
-		else
-			cwd_text = basename(cwd)
-		end
-	end
-	-- --展示完成目录，太长了不美观
-	-- elseif cwd then
-	-- 	if type(cwd) == "userdata" then
-	-- 		cwd = cwd.file_path
-	-- 	else
-	-- 		cwd = cwd
-	-- 	end
-
-	-- 时间和日期
-	local time = wezterm.strftime("%H:%M")
-	local wday_num = tonumber(wezterm.strftime("%w"))
-	local wday_names = { "日", "一", "二", "三", "四", "五", "六" }
-	-- local wday_chinese = "星期" .. wday_names[wday_num + 1]
-	local wday_chinese = "星期" .. (wday_names[wday_num + 1] or "未知")
-
-	-- 电池信息
-	local bat = ""
-	local bat_info = wezterm.battery_info()
-	if #bat_info > 0 then
-		local charge = bat_info[1].state_of_charge * 100
-		-- 这个图标不好看，不用了
-		-- local bat_icon = charge > 80 and "🔋" or charge > 20 and "🔋" or "🪫"
-		local bat_icon
-		if charge > 80 then
-			bat_icon = " "
-		elseif charge > 50 then
-			bat_icon = " "
-		elseif charge > 20 then
-			bat_icon = " "
-		else
-			bat_icon = "󱉞 "
-		end
-		bat = string.format("%s %.0f%%", bat_icon, charge)
-	end
-
-	-- 左状态栏
-	window:set_left_status(wezterm.format({
-		{ Foreground = { Color = stat_color } },
-		{ Text = " " },
-		{ Text = wezterm.nerdfonts.dev_apple .. " " .. stat },
-		{ Text = " " },
-		{ Text = wezterm.nerdfonts.cod_terminal_linux .. "  " },
-	}))
-
-	-- 右状态栏
-	window:set_right_status(wezterm.format({
-		{ Text = wezterm.nerdfonts.fa_chevron_left .. "  " },
-		{ Foreground = { Color = "#e0af68" } },
-		{ Text = wezterm.nerdfonts.cod_folder .. "  " .. cwd_text },
-		"ResetAttributes",
-		{ Text = "   " },
-		{ Text = wezterm.nerdfonts.md_timer_sand_complete .. "  " .. time },
-		{ Text = "   " },
-		{ Foreground = { Color = "#e0af25" } },
-		{ Text = bat },
-		"ResetAttributes",
-		{ Text = "  " .. wezterm.nerdfonts.fa_chevron_right .. "  " },
-		{ Foreground = { Color = "#e0af99" } },
-		{ Text = wday_chinese .. " " },
-	}))
-end)
 
 -- ============================================================================
 -- 新标签页按钮事件
@@ -611,44 +335,6 @@ config.mouse_bindings = {
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "CTRL",
 		action = act.OpenLinkAtMouseCursor,
-	},
-}
-
--- ============================================================================
--- 高亮和搜索配置
--- ============================================================================
-config.quick_select_patterns = {
-	-- 日志级别
-	"\\b(?i)(ERROR|FATAL|PANIC|CRITICAL)\\b",
-	"\\b(?i)(WARN|WARNING|DEPRECATED)\\b",
-	"\\b(?i)(INFO|NOTICE|DEBUG)\\b",
-	"\\b(?i)(SUCCESS|OK|PASSED)\\b",
-
-	-- 网络
-	"\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b", -- IPv4
-	"https?://[\\w\\d\\.-]+(?:[:\\d+])?(?:/[\\w\\d\\.-_/?%&=]*)?", -- URL
-
-	-- 文件路径
-	"[~/][\\w\\d\\.\\-_/]+\\.(log|txt|conf|cfg|ini|yaml|yml|json|py|js|ts|go|rs)\\b",
-
-	-- 时间戳
-	"\\d{4}-\\d{2}-\\d{2}[T\\s]\\d{2}:\\d{2}:\\d{2}",
-
-	-- Git SHA
-	"\\b[a-f0-9]{7,40}\\b",
-}
-
--- ============================================================================
--- 超链接规则
--- ============================================================================
-config.hyperlink_rules = {
-	{
-		regex = "\\b\\w+://[\\w.-]+\\S*\\b",
-		format = "$0",
-	},
-	{
-		regex = "\\bfile://\\S*\\b",
-		format = "$0",
 	},
 }
 
