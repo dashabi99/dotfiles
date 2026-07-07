@@ -75,22 +75,25 @@ config.audible_bell = "Disabled"
 -- 打字时隐藏鼠标光标显示，默认为true
 config.hide_mouse_cursor_when_typing = true
 -- 设置滚动行数
-config.scrollback_lines = 10000
+config.scrollback_lines = 20000
 
 -- 渲染设置-gpu -- (OpenGL可能稳定一点)
-config.front_end = "OpenGL"
---config.front_end = "WebGpu"
---config.webgpu_power_preference = "HighPerformance"
+--config.front_end = "OpenGL"
+config.front_end = "WebGpu"
+config.webgpu_power_preference = "HighPerformance"
 --config.webgpu_force_fallback_adapter = false
 -- 可以选择打开或者关闭，感觉没区别，就是剪切板有点难受
 -- config.enable_wayland = false
 
 --添加动画fps,以及光标设置
 config.animation_fps = 1
-config.max_fps = 60
+config.max_fps = 120
 
-config.term = "xterm-256color"
---config.term = "wezterm"
+--config.term = "xterm-256color"
+config.term = "wezterm"
+-- 字体处理
+config.freetype_load_target = 'Light'
+config.freetype_render_target = 'Normal'
 
 -- ============================================================================
 -- 字体配置
