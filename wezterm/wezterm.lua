@@ -89,11 +89,12 @@ config.webgpu_power_preference = "HighPerformance"
 config.animation_fps = 1
 config.max_fps = 120
 
---config.term = "xterm-256color"
-config.term = "wezterm"
+config.term = "xterm-256color"
+-- 不建议使用这个，会导致退出nvim有点不对
+--config.term = "wezterm"
 -- 字体处理
-config.freetype_load_target = 'Light'
-config.freetype_render_target = 'Normal'
+config.freetype_load_target = "Light"
+config.freetype_render_target = "Normal"
 
 -- ============================================================================
 -- 字体配置
@@ -101,7 +102,7 @@ config.freetype_render_target = 'Normal'
 -- 当第一个字体没安装时，使用第二个字体
 --config.font = wezterm.font("UbuntuMono Nerd Font")
 --config.font = wezterm.font("Consolas")
-config.font_size = 15
+config.font_size = 14
 config.line_height = 1.2
 --config.font = wezterm.font_with_fallback({
 --    { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
