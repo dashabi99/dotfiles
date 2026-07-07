@@ -19,6 +19,7 @@ set number
 set norelativenumber
 # 高亮当前行
 set cursorline
+#set cursorcolumn
 # 显示光标位置
 set ruler
 # 设置窗口标题
@@ -421,7 +422,7 @@ enddef
 
 command! FzfFiles call FzfFiles()
 
-nnoremap <silent> ff :<C-U>FzfFiles<CR>
+nnoremap <silent> <Leader>ff :<C-U>FzfFiles<CR>
 
 
 # ============================================================
