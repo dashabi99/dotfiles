@@ -20,8 +20,8 @@ config.colors = {
 	-- 光标颜色
 	cursor_bg = "#FBB829",
 	cursor_border = "#FBB829",
+	background = "#222222",
 }
-config.colors.background = "#222222"
 
 -- 第三种方法
 -- config.color_scheme = "Ubuntu"
