@@ -100,17 +100,15 @@ config.freetype_render_target = "Normal"
 -- 字体配置
 -- ============================================================================
 -- 当第一个字体没安装时，使用第二个字体
---config.font = wezterm.font("UbuntuMono Nerd Font")
---config.font = wezterm.font("Consolas")
-config.font_size = 14
-config.line_height = 1.2
 --config.font = wezterm.font_with_fallback({
 --    { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
 --	--{ family = "Ioskeley Mono", weight = "Regular" },
 --	--{ family = "LXGW WenKai Mono", weight = "Regular" },
---	-- { family = "Maple Mono NF CN", weight = "Regular" },
---	-- { family = "FiraCode Nerd Font", weight = "Regular" },
---	-- { family = "JetBrains Mono", weight = "Medium" },
+--	--{ family = "Maple Mono NF CN", weight = "Regular" },
+--	--{ family = "FiraCode Nerd Font", weight = "Regular" },
+--	--{ family = "JetBrains Mono", weight = "Medium" },
+--  --"Ubuntu Mono",
+--  --"nonicons",
 --	--"Noto Color Emoji",
 --})
 -- 为特定Unicode范围指定字体；
@@ -128,7 +126,7 @@ config.line_height = 1.2
 --}
 
 -- 字体大小和行高
-config.font_size = 13
+config.font_size = 15
 config.line_height = 0.9
 
 -- 窗口初始大小
