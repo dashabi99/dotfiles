@@ -9,6 +9,7 @@ require('plugins.colorscheme')
 require('plugins.nvim-web-devicons')
 -- 状态栏
 require('plugins.statusline')
+-- require('plugins.express_line')
 -- 代码补全 先加载blink 再加载lsp
 require('plugins.blink')
 -- 文件管理器

@@ -8,33 +8,39 @@ vim.pack.add({
 })
 
 -- 先配置 LuaSnip 和 friendly-snippets
-local ok_luasnip, luasnip = pcall(require, 'luasnip')
-if ok_luasnip then
-    -- 加载 friendly-snippets（VSCode 风格）
-    require('luasnip.loaders.from_vscode').lazy_load()
+-- LuaSnip 是后续配置的必要依赖，因此直接 require，让错误尽早暴露。
+local luasnip = require('luasnip')
 
-    -- 可选：LuaSnip 一些基础设置
-    luasnip.config.set_config({
-        history = true,
-        updateevents = 'TextChanged,TextChangedI',
-        enable_autosnippets = true,
-    })
-end
+luasnip.config.setup({
+    -- 如果当前 LuaSnip 版本不识别该名称，再改回 updateevents。
+    update_events = 'TextChanged,TextChangedI',
+    enable_autosnippets = true,
+})
+
+require('luasnip.loaders.from_vscode').lazy_load()
 
 -- 再配置 blink.cmp
 require('blink.cmp').setup({
     keymap = {
+        preset = 'enter',
         ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
         ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
-        preset = 'enter',
-        ['<CR>'] = { 'select_and_accept', 'fallback' },
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
     },
     appearance = {
         nerd_font_variant = 'mono',
     },
-    -- 不自动显示当前函数的信息，按K查看
+    -- 自动显示当前函数的信息
     completion = {
-        documentation = { auto_show = false },
+        documentation = { auto_show = true },
+        list = {
+            selection = {
+                preselect = false,
+                -- auto_insert = false,
+            },
+        },
     },
     -- 命令模式不自动显示补全，tab显示，回车确认
     cmdline = {
