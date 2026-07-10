@@ -56,3 +56,8 @@ map('n', 'vv', '<C-v>', { noremap = true })
 map('i', 'jk', '<Esc>', { noremap = true, silent = true })
 -- 命令行模式下，将 'jk' 映射为 'Esc'
 map('c', 'jk', '<Esc>', { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>ut', function()
+    vim.cmd('packadd nvim.undotree')
+    vim.cmd('Undotree')
+end, { desc = '打开当前文件的Undotree面板' })

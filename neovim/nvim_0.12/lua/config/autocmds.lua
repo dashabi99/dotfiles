@@ -1,90 +1,123 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
--- ========== 光标和文件操作 ==========
+-- 建议加统一前缀，避免与插件的 augroup 重名
+local function group(name)
+    return augroup('User_' .. name, { clear = true })
+end
 
--- 恢复光标位置
+-- ============================================================
+-- 光标和文件操作
+-- ============================================================
+
+-- 恢复上次编辑时的光标位置
 autocmd('BufReadPost', {
-    group = augroup('restore_cursor', { clear = true }),
+    group = group('restore_cursor'),
     desc = '恢复上次编辑时的光标位置',
-    callback = function()
-        local mark = vim.api.nvim_buf_get_mark(0, '"')
-        local lcount = vim.api.nvim_buf_line_count(0)
-        if mark[1] > 0 and mark[1] <= lcount then
+    callback = function(event)
+        -- 跳过帮助页、终端、快捷列表等特殊 buffer
+        if vim.bo[event.buf].buftype ~= '' then
+            return
+        end
+
+        local mark = vim.api.nvim_buf_get_mark(event.buf, '"')
+        local line_count = vim.api.nvim_buf_line_count(event.buf)
+
+        if mark[1] > 0 and mark[1] <= line_count then
+            -- BufReadPost 通常发生在当前窗口，但使用 pcall 可以避免
+            -- 文件内容发生变化后列位置越界导致报错
             pcall(vim.api.nvim_win_set_cursor, 0, mark)
         end
     end,
 })
 
--- ========== 复制高亮 ==========
+-- ============================================================
+-- 复制高亮
+-- ============================================================
 
--- 高亮复制的文本
 autocmd('TextYankPost', {
-    group = augroup('highlight_yank', { clear = true }),
-    pattern = '*',
+    group = group('highlight_yank'),
     desc = '高亮复制的文本',
     callback = function()
         vim.hl.on_yank({
-            timeout = 300, -- 高亮持续时间
-            visual = true, -- 在visual模式下也高亮
-            higroup = 'IncSearch', -- 使用IncSearch高亮组，可以自定义
+            higroup = 'IncSearch',
+            timeout = 300,
+            on_visual = true,
         })
     end,
 })
 
--- 注释不自动换行到下一行
-autocmd('BufEnter', {
-    group = augroup('comment_format', { clear = true }),
+-- ============================================================
+-- 禁止自动延续注释
+-- ============================================================
+
+-- FileType 用于处理 ftplugin 设置 formatoptions 的情况；
+-- BufEnter 用于在重新进入 buffer 时再次保证配置生效。
+autocmd({ 'FileType', 'BufEnter' }, {
+    group = group('comment_format'),
     pattern = '*',
-    desc = '禁用注释自动换行',
+    desc = '禁用注释自动换行和自动延续',
     callback = function()
-        -- 移除自动注释格式选项
         vim.opt_local.formatoptions:remove({ 'c', 'r', 'o' })
     end,
 })
 
--- ========== 文件类型特定设置 ==========
+-- c：在插入模式下自动换行注释
+-- r：按 Enter 后自动插入注释符号
+-- o：使用 o/O 新建行时自动插入注释符号
 
--- Markdown 文件特殊设置
+-- ============================================================
+-- 文件类型特定设置
+-- ============================================================
+
+-- Markdown
+local markdown_group = group('markdown_settings')
+
 autocmd('FileType', {
-    group = augroup('markdown_settings', { clear = true }),
-    pattern = 'markdown',
-    desc = 'Markdown 文件特殊设置',
+    group = markdown_group,
+    pattern = { 'markdown', 'markdown.mdx' },
+    desc = 'Markdown 文件设置',
     callback = function()
-        vim.opt_local.wrap = true -- 启用换行
-        vim.opt_local.linebreak = true -- 按词换行
-        vim.opt_local.spell = true -- 启用拼写检查
-        vim.opt_local.conceallevel = 2 -- 隐藏markdown语法
+        vim.opt_local.wrap = true
+        vim.opt_local.linebreak = true
+        vim.opt_local.spell = true
+        vim.opt_local.conceallevel = 2
     end,
 })
 
--- JSON 文件格式化
+-- JSON / JSONC
 autocmd('FileType', {
-    group = augroup('json_settings', { clear = true }),
-    pattern = 'json',
+    group = group('json_settings'),
+    pattern = { 'json', 'jsonc' },
     desc = 'JSON 文件设置',
     callback = function()
         vim.opt_local.tabstop = 2
         vim.opt_local.shiftwidth = 2
-        vim.opt_local.conceallevel = 0 -- 显示所有JSON语法
+        vim.opt_local.softtabstop = 2
+        vim.opt_local.expandtab = true
+        vim.opt_local.conceallevel = 0
     end,
 })
 
--- YAML 文件设置
+-- YAML
 autocmd('FileType', {
-    group = augroup('yaml_settings', { clear = true }),
+    group = group('yaml_settings'),
     pattern = { 'yaml', 'yml' },
     desc = 'YAML 文件设置',
     callback = function()
         vim.opt_local.tabstop = 2
         vim.opt_local.shiftwidth = 2
+        vim.opt_local.softtabstop = 2
         vim.opt_local.expandtab = true
     end,
 })
 
--- 自动关闭某些特殊窗口
+-- ============================================================
+-- 特殊窗口按 q 关闭
+-- ============================================================
+
 autocmd('FileType', {
-    group = augroup('close_with_q', { clear = true }),
+    group = group('close_with_q'),
     pattern = {
         'help',
         'startuptime',
@@ -96,10 +129,17 @@ autocmd('FileType', {
         'notify',
         'noice',
         'Trouble',
+        'trouble',
     },
-    desc = '特殊窗口按q关闭',
+    desc = '特殊窗口按 q 关闭',
     callback = function(event)
         vim.bo[event.buf].buflisted = false
-        vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true })
+
+        vim.keymap.set('n', 'q', '<cmd>close<cr>', {
+            buffer = event.buf,
+            silent = true,
+            nowait = true,
+            desc = '关闭当前特殊窗口',
+        })
     end,
 })
