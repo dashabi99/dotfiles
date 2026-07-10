@@ -185,6 +185,7 @@ Statusline = {}
 function Statusline.active()
     return table.concat({
         filename_block(), -- [ 路径 + 文件名 ]，带动态高亮
+        '%#StlRest#',
         git(),
         ' ',
         diagnostics(),
