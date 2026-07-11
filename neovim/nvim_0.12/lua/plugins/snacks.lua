@@ -21,9 +21,17 @@ Snacks.setup({
         win = {
             input = {
                 keys = {
-                    ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
-                    -- ctrl+o 打开选择文件到一个tab
-                    ['<C-o>'] = { 'edit_tab', mode = { 'n', 'i' } },
+                    -- ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+                    -- ctrl+n 打开选择文件到一个tab
+                    ['<C-n>'] = { 'edit_tab', mode = { 'n', 'i' } },
+                    ['<C-s>'] = { 'edit_split', mode = { 'i', 'n' } },
+                    ['<C-\\>'] = { 'edit_vsplit', mode = { 'i', 'n' } },
+                },
+            },
+            list = {
+                keys = {
+                    ['<C-s>'] = 'edit_split',
+                    ['<C-\\>'] = 'edit_vsplit',
                 },
             },
         },
