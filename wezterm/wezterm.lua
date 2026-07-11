@@ -95,20 +95,28 @@ config.term = "xterm-256color"
 -- 字体处理
 config.freetype_load_target = "Light"
 config.freetype_render_target = "Normal"
+-- 防止较宽字形画进相邻单元格
+config.allow_square_glyphs_to_overflow_width = "Never"
 
 -- ============================================================================
 -- 字体配置
+-- wezterm ls-fonts --list-system  查看当前环境安装了哪些字体
 -- ============================================================================
 -- 当第一个字体没安装时，使用第二个字体
+--config.font = wezterm.font("UbuntuMono Nerd Font")
+--config.font = wezterm.font("Consolas")
+
+config.font = wezterm.font_with_fallback({
+	"Ubuntu Mono",
+	"nonicons",
+})
 --config.font = wezterm.font_with_fallback({
 --    { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
 --	--{ family = "Ioskeley Mono", weight = "Regular" },
 --	--{ family = "LXGW WenKai Mono", weight = "Regular" },
---	--{ family = "Maple Mono NF CN", weight = "Regular" },
---	--{ family = "FiraCode Nerd Font", weight = "Regular" },
---	--{ family = "JetBrains Mono", weight = "Medium" },
---  --"Ubuntu Mono",
---  --"nonicons",
+--	-- { family = "Maple Mono NF CN", weight = "Regular" },
+--	-- { family = "FiraCode Nerd Font", weight = "Regular" },
+--	-- { family = "JetBrains Mono", weight = "Medium" },
 --	--"Noto Color Emoji",
 --})
 -- 为特定Unicode范围指定字体；
@@ -127,7 +135,7 @@ config.freetype_render_target = "Normal"
 
 -- 字体大小和行高
 config.font_size = 15
-config.line_height = 0.9
+config.line_height = 1.2
 
 -- 窗口初始大小
 config.initial_cols = 120 -- 增加列数
