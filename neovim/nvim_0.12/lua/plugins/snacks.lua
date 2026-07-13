@@ -21,7 +21,7 @@ Snacks.setup({
         win = {
             input = {
                 keys = {
-                    -- ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+                    ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
                     -- ctrl+n 打开选择文件到一个tab
                     ['<C-n>'] = { 'edit_tab', mode = { 'n', 'i' } },
                     ['<C-s>'] = { 'edit_split', mode = { 'i', 'n' } },

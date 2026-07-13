@@ -57,8 +57,8 @@ vim.lsp.enable({
 local diagnostic_signs = {
     Error = ' ',
     Warn = ' ',
-    Hint = '',
-    Info = '',
+    Hint = ' ',
+    Info = ' ',
 }
 vim.diagnostic.config({
     virtual_text = { prefix = '●', spacing = 4 },
@@ -98,7 +98,8 @@ require('conform').setup({
         sh = { 'shfmt' },
         bash = { 'shfmt' },
         zsh = { 'shfmt' },
-        json = { 'fixjson' },
+        json = { 'biome' },
+        jsonc = { 'biome' },
         c = { 'clang_format' },
         cpp = { 'clang_format' },
     },
