@@ -189,10 +189,13 @@ end
 local os_info = platform()
 if os_info.is_win then
 	config.default_prog = { "pwsh", "-NoLogo" }
+	config.leader = { key = "b", mods = "CTRL", timeout_milliseconds = 3000 } -- 设置快捷键前缀
 elseif os_info.is_linux then
 	config.default_prog = { "zsh", "-l" }
+	config.leader = { key = "b", mods = "ALT", timeout_milliseconds = 3000 } -- 设置快捷键前缀
 elseif os_info.is_mac then
 	config.default_prog = { "zsh", "-l" }
+	config.leader = { key = "b", mods = "ALT", timeout_milliseconds = 3000 } -- 设置快捷键前缀
 	-- macOS 特定设置
 	-- config.macos_window_background_blur = 20
 end
@@ -219,7 +222,6 @@ end)
 -- ============================================================================
 -- 键盘绑定
 -- ============================================================================
-config.leader = { key = "b", mods = "ALT", timeout_milliseconds = 3000 } -- 设置快捷键前缀
 config.keys = {
 	-- 一次性退出全部窗口
 	{ key = "q", mods = "LEADER", action = act.QuitApplication },

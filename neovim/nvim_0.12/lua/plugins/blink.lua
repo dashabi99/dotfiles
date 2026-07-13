@@ -34,7 +34,20 @@ require('blink.cmp').setup({
     },
     -- 自动显示当前函数的信息
     completion = {
-        documentation = { auto_show = true, scrollbar = false },
+        documentation = {
+            auto_show = true,
+            window = {
+                border = 'rounded',
+                scrollbar = false,
+                winhighlight = 'Normal:BlinkCmpDoc,FloatBorder:FloatBorder,EndOfBuffer:BlinkCmpDoc',
+            },
+        },
+        menu = {
+            auto_show = true,
+            scrollbar = false,
+            border = 'rounded',
+            winhighlight = 'Normal:BlinkCmpMenu,FloatBorder:FloatBorder,CursorLine:BlinkCmpMenuSelection,Search:None',
+        },
         list = {
             selection = {
                 -- 不预选第一个
@@ -49,7 +62,6 @@ require('blink.cmp').setup({
         completion = {
             menu = {
                 auto_show = false,
-                scrollbar = false,
             },
         },
         keymap = {
@@ -60,7 +72,10 @@ require('blink.cmp').setup({
     -- 编辑代码时自动显示信息
     signature = {
         enabled = true,
-        scrollbar = false,
+        window = {
+            border = 'rounded',
+            scrollbar = false,
+        },
     },
     -- 使用 LuaSnip 预设
     snippets = {
