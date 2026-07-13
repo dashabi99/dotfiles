@@ -34,10 +34,12 @@ require('blink.cmp').setup({
     },
     -- 自动显示当前函数的信息
     completion = {
-        documentation = { auto_show = true },
+        documentation = { auto_show = true, scrollbar = false },
         list = {
             selection = {
+                -- 不预选第一个
                 preselect = false,
+                -- 选中时自动插入
                 -- auto_insert = false,
             },
         },
@@ -47,6 +49,7 @@ require('blink.cmp').setup({
         completion = {
             menu = {
                 auto_show = false,
+                scrollbar = false,
             },
         },
         keymap = {
@@ -57,6 +60,7 @@ require('blink.cmp').setup({
     -- 编辑代码时自动显示信息
     signature = {
         enabled = true,
+        scrollbar = false,
     },
     -- 使用 LuaSnip 预设
     snippets = {

@@ -47,6 +47,8 @@ local function map(key, func, desc)
     })
 end
 
-map('<leader>fg', Snacks.picker.grep, 'Find Grep')
 map('<leader>ff', Snacks.picker.smart, 'Smart Find Files')
+map('<leader>fg', Snacks.picker.grep, 'Find Grep')
 map('<leader>fb', Snacks.picker.buffers, 'Find Buffers')
+map('<leader>fd', Snacks.picker.diagnostics, 'Find Diagnostics')
+map('<leader>fk', Snacks.picker.keymaps, 'Find Keymaps')
