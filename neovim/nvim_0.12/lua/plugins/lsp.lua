@@ -55,10 +55,10 @@ vim.lsp.enable({
 
 -- 诊断
 local diagnostic_signs = {
-    Error = ' ',
-    Warn = ' ',
+    Error = ' ',
+    Warn = ' ',
     Hint = ' ',
-    Info = ' ',
+    Info = ' ',
 }
 vim.diagnostic.config({
     virtual_text = { prefix = '●', spacing = 4 },
@@ -92,6 +92,26 @@ vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = 'Find references' })
 vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'LSP hover' })
 
 require('conform').setup({
+    -- notify_on_error = false,
+    format_on_save = function(bufnr)
+        local enabled_filetypes = {
+            lua = true,
+            python = true,
+            json = true,
+            c = true,
+            cpp = true,
+            sh = true,
+            bash = true,
+        }
+        if enabled_filetypes[vim.bo[bufnr].filetype] then
+            return { timeout_ms = 5000 }
+        else
+            return nil
+        end
+    end,
+    default_format_opts = {
+        lsp_format = 'fallback',
+    },
     formatters_by_ft = {
         lua = { 'stylua' },
         python = { 'isort', 'black' },
@@ -116,17 +136,13 @@ require('conform').setup({
             stdin = true,
         },
     },
-    format_on_save = {
-        timeout_ms = 5000,
-        lsp_fallback = true,
-    },
 })
 
 -- 格式化快捷键
 vim.keymap.set({ 'n' }, '<leader>lf', function()
     require('conform').format({
-        async = false,
+        async = true,
         lsp_fallback = true,
-        timeout_ms = 500,
+        timeout_ms = 5000,
     })
 end, { desc = 'Format file' })

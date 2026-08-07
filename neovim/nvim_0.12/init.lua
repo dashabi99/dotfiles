@@ -1,20 +1,21 @@
 require('config.options')
 require('config.keymaps')
 require('config.autocmds')
--- 插件主题
-require('plugins.colorscheme')
 
 -- ===插件===
--- 图标
-require('plugins.nvim-web-devicons')
--- 状态栏
+
+-- 图标+git插件
+require('plugins.git_icons')
+-- 颜色主题
+require('plugins.colorscheme')
+-- 自定义状态栏
 require('plugins.statusline')
 -- require('plugins.express_line')
 -- 代码补全 先加载blink 再加载lsp
 require('plugins.blink')
 -- 文件管理器
 require('plugins.oil')
--- lsp + 格式化
+-- lsp + 格式化 + 诊断
 require('plugins.lsp')
 -- 语法高亮
 --require("plugins.treesitter")

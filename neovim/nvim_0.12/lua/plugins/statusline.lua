@@ -1,203 +1,300 @@
-vim.pack.add({
-    { src = 'https://github.com/lewis6991/gitsigns.nvim' },
-})
+-- lua/plugins/statusline.lua
 
-require('gitsigns').setup({
-    signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '-' },
-        topdelete = { text = '^' },
-        changedelete = { text = '!' },
-        untracked = { text = '?' },
+local M = {}
+
+local function statusline_escape(value)
+    return tostring(value or ''):gsub('%%', '%%%%')
+end
+
+local mode_names = {
+    n = 'NORMAL',
+    no = 'OPERATOR',
+    nov = 'OPERATOR',
+    noV = 'OPERATOR',
+    ['no\22'] = 'OPERATOR',
+    niI = 'NORMAL',
+    niR = 'NORMAL',
+    niV = 'NORMAL',
+
+    v = 'VISUAL',
+    V = 'V-LINE',
+    ['\22'] = 'V-BLOCK',
+
+    s = 'SELECT',
+    S = 'S-LINE',
+    ['\19'] = 'S-BLOCK',
+
+    i = 'INSERT',
+    ic = 'INSERT',
+    ix = 'INSERT',
+
+    R = 'REPLACE',
+    Rc = 'REPLACE',
+    Rx = 'REPLACE',
+    Rv = 'V-REPLACE',
+    Rvc = 'V-REPLACE',
+    Rvx = 'V-REPLACE',
+
+    c = 'COMMAND',
+    cv = 'EX',
+    ce = 'EX',
+
+    r = 'PROMPT',
+    rm = 'MORE',
+    ['r?'] = 'CONFIRM',
+
+    ['!'] = 'SHELL',
+    t = 'TERMINAL',
+}
+
+local diagnostic_items = {
+    {
+        severity = vim.diagnostic.severity.ERROR,
+        icon = ' ',
+        highlight = 'DiagnosticError',
     },
+    {
+        severity = vim.diagnostic.severity.WARN,
+        icon = ' ',
+        highlight = 'DiagnosticWarn',
+    },
+    {
+        severity = vim.diagnostic.severity.INFO,
+        icon = ' ',
+        highlight = 'DiagnosticInfo',
+    },
+    {
+        severity = vim.diagnostic.severity.HINT,
+        icon = ' ',
+        highlight = 'DiagnosticHint',
+    },
+}
 
-    signcolumn = true,
-    current_line_blame = false,
-})
+local statusline_colors = {
+    mode = {
+        fg = '#ffffff',
+        bg = '#3b82f6',
+        bold = true,
+    },
+    git = {
+        fg = '#1f2328',
+        bg = '#a7c080',
+        bold = true,
+    },
+    file = {
+        fg = '#eceff4',
+        bg = '#4c566a',
+        bold = true,
+    },
+    filetype = {
+        fg = '#d8dee9',
+        bg = '#3b4252',
+    },
+    position = {
+        fg = '#1f2328',
+        bg = '#88c0d0',
+        bold = true,
+    },
+}
 
--- 全局状态栏（laststatus = 3）
-vim.o.laststatus = 3
+local function set_highlights()
+    vim.api.nvim_set_hl(0, 'StlMode', statusline_colors.mode)
+    vim.api.nvim_set_hl(0, 'StlGit', statusline_colors.git)
+    vim.api.nvim_set_hl(0, 'StlFile', statusline_colors.file)
+    vim.api.nvim_set_hl(0, 'StlFiletype', statusline_colors.filetype)
+    vim.api.nvim_set_hl(0, 'StlPosition', statusline_colors.position)
+end
 
-----------------------------------------------------------------------
--- 单独设置背景，状态栏，分割线颜色，与主题插件解耦
-----------------------------------------------------------------------
+local function get_mode()
+    local current_mode = vim.api.nvim_get_mode().mode
+    return mode_names[current_mode] or current_mode:upper()
+end
 
--- 当前窗口背景设为淡黑色
--- 先获取当前 Normal 的高亮设置
-local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
--- 合并，保留原来的 fg 等字段，只覆盖 bg
-normal.bg = '#2c2c34'
--- normal.bg = 'none'
-vim.api.nvim_set_hl(0, 'Normal', normal)
+local function get_git_segment(bufnr)
+    local parts = {}
 
--- 当前状态栏背景和非活动的状态栏背景(因为我是全局状态栏所有颜色是一样的)
-vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#00d4ff' })
-vim.api.nvim_set_hl(0, 'StatusLineNC', { bg = '#00d4ff' })
+    local head = vim.b[bufnr].gitsigns_head
 
--- 窗口分割线颜色
--- 简单粗暴：白线 + 黑背景
-vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#ffffff' })
-vim.api.nvim_set_hl(0, 'VertSplit', { fg = '#ffffff' })
-
-----------------------------------------------------------------------
--- 根据模式切换文件名高亮：Normal / Insert / Visual / Terminal / Command /
-----------------------------------------------------------------------
-
-local function update_stl_filename_hl()
-    -- 当前模式，第一个字符：n / i / v / R / c / t ...
-    local m = vim.fn.mode():sub(1, 1)
-
-    local link
-
-    if m == 'n' then
-        -- Normal 模式：文件名背景 = Normal（跟编辑区背景一致）
-        link = 'Normal'
-    elseif m == 'i' then
-        -- 插入模式：用 ModeMsg 做示例（一般比较显眼），你可以改成别的
-        link = 'ModeMsg'
-    elseif m == 'v' or m == 'V' or m == '\22' then
-        -- 可视模式（包括 V 和 Ctrl-V）：用 Visual 高亮
-        link = 'Visual'
-    elseif m == 't' then
-        -- 终端模式：这里示例用 StatusLine（你可以换成 TermCursor / MoreMsg 等）
-        link = 'StatusLine'
-    elseif m == 'c' then
-        -- 命令模式：这里示例用 WarningMsg（一般是黄色），可按喜好调整
-        link = 'WarningMsg'
-    else
-        -- 其它模式（替换、选择等）：统一用 StatusLine
-        link = 'StatusLine'
+    if head and head ~= '' then
+        parts[#parts + 1] = statusline_escape(head)
     end
 
-    vim.api.nvim_set_hl(0, 'StlFilename', { link = link })
-end
+    local status = vim.b[bufnr].gitsigns_status_dict
 
-local grp = vim.api.nvim_create_augroup('StlFilenameModeColor', { clear = true })
+    if status then
+        local added = tonumber(status.added) or 0
+        local changed = tonumber(status.changed) or 0
+        local removed = tonumber(status.removed) or 0
 
-vim.api.nvim_create_autocmd({ 'ModeChanged', 'WinEnter', 'BufEnter' }, {
-    group = grp,
-    callback = update_stl_filename_hl,
-})
+        if added > 0 then
+            parts[#parts + 1] = '+' .. added
+        end
 
--- 启动时先执行一次，确保 StlFilename 已有正确 link
-update_stl_filename_hl()
+        if changed > 0 then
+            parts[#parts + 1] = '~' .. changed
+        end
 
--- 让 statusline 里「文件名后面的部分」统一用黑色前景
-local function setup_stl_rest_hl()
-    -- 取当前 StatusLine 的背景，这样不会破坏主题的背景颜色
-    local ok, stl = pcall(vim.api.nvim_get_hl, 0, { name = 'StatusLine', link = false })
-    local bg = ok and stl.bg or nil
+        if removed > 0 then
+            parts[#parts + 1] = '-' .. removed
+        end
+    end
 
-    vim.api.nvim_set_hl(0, 'StlRest', {
-        fg = '#111111', -- 黑色字体
-        bg = bg, -- 背景沿用 StatusLine 的背景
-    })
-end
-
-local rest_grp = vim.api.nvim_create_augroup('StlRestColor', { clear = true })
-
-vim.api.nvim_create_autocmd('ColorScheme', {
-    group = rest_grp,
-    callback = setup_stl_rest_hl,
-})
-
--- 启动时先设置一次
-setup_stl_rest_hl()
-
-----------------------------------------------------------------------
--- statusline 各个组件
-----------------------------------------------------------------------
-
--- 路径：始终显示（带截断）
-local function filepath()
-    local fpath = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.:h')
-
-    if fpath == '' or fpath == '.' then
+    if #parts == 0 then
         return ''
     end
 
-    -- %< 让过长路径可截断
-    return string.format('%%<%s/', fpath)
+    return '%#StlGit# ' .. table.concat(parts, ' ') .. ' %*'
 end
 
--- git 信息：依赖 gitsigns 的 vim.b.gitsigns_status_dict
-local function git()
-    local git_info = vim.b.gitsigns_status_dict
-    if not git_info or git_info.head == '' then
-        return ''
+local function get_path_max_width()
+    -- 路径最多占状态栏宽度的 40%，范围限制为 30 到 80 列。
+    local width = math.floor(vim.o.columns * 0.4)
+    return math.max(30, math.min(width, 80))
+end
+
+local function get_file_path(bufnr)
+    local name = vim.api.nvim_buf_get_name(bufnr)
+
+    if name == '' then
+        return '[No Name]'
     end
 
-    local head = git_info.head
-    local added = git_info.added and (' +' .. git_info.added) or ''
-    local changed = git_info.changed and (' ~' .. git_info.changed) or ''
-    local removed = git_info.removed and (' -' .. git_info.removed) or ''
-    if git_info.added == 0 then
-        added = ''
-    end
-    if git_info.changed == 0 then
-        changed = ''
-    end
-    if git_info.removed == 0 then
-        removed = ''
+    -- 默认显示绝对路径。
+    local path = vim.fn.fnamemodify(name, ':p')
+    local max_width = get_path_max_width()
+
+    -- 路径过长时缩短目录名，文件名保持完整。
+    if vim.fn.strdisplaywidth(path) > max_width then
+        path = vim.fn.pathshorten(path, 1)
     end
 
+    return statusline_escape(path)
+end
+
+local function get_file_segment(bufnr)
     return table.concat({
-        '[ ',
-        head,
-        added,
-        changed,
-        removed,
-        ']',
+        '%#StlFile# ',
+        get_file_path(bufnr),
+        ' %m%r ',
+        '%*',
     })
 end
 
--- 诊断汇总：依赖 vim.diagnostic.status()
-local function diagnostics()
-    local status = vim.diagnostic.status()
+local function diagnostics_enabled(bufnr)
+    if type(vim.diagnostic.is_enabled) ~= 'function' then
+        return true
+    end
 
-    if not status or status == '' then
+    local ok, enabled = pcall(vim.diagnostic.is_enabled, {
+        bufnr = bufnr,
+    })
+
+    return not ok or enabled
+end
+
+local function get_diagnostics(bufnr)
+    if not diagnostics_enabled(bufnr) then
         return ''
     end
 
-    return '[' .. status .. ']'
+    local parts = {}
+
+    for _, item in ipairs(diagnostic_items) do
+        local count = #vim.diagnostic.get(bufnr, {
+            severity = item.severity,
+        })
+
+        if count > 0 then
+            parts[#parts + 1] = string.format('%%#%s#%s%d%%*', item.highlight, item.icon, count)
+        end
+    end
+
+    if #parts == 0 then
+        return ''
+    end
+
+    return ' ' .. table.concat(parts, ' ') .. ' '
 end
 
--- 文件名块：用 StlFilename 高亮包裹
--- %#StlFilename#[ 路径%t ]%*
-local function filename_block()
+local function get_filetype_segment(bufnr)
+    local filetype = vim.bo[bufnr].filetype
+
+    if filetype == '' then
+        filetype = 'text'
+    end
+
     return table.concat({
-        '%#StlFilename#',
-        '[ ',
-        filepath(),
-        '%t',
-        ' ]',
-        '%* ',
+        '%#StlFiletype# ',
+        statusline_escape(filetype),
+        ' %*',
     })
 end
 
-----------------------------------------------------------------------
--- Statusline 对象（只需要 active 一个接口）
-----------------------------------------------------------------------
+local function get_position_segment()
+    return '%#StlPosition# %l:%c %*'
+end
 
-Statusline = {}
+function M.render()
+    local bufnr = vim.api.nvim_get_current_buf()
 
-function Statusline.active()
     return table.concat({
-        filename_block(), -- [ 路径 + 文件名 ]，带动态高亮
-        '%#StlRest#',
-        git(),
-        ' ',
-        diagnostics(),
-        -- 从这里开始，全部用 StlRest（黑色字体）
-        '%#StlRest#',
-        ' ',
-        '%h%m%r',
-        ' ',
+        '%#StlMode# ',
+        statusline_escape(get_mode()),
+        ' %*',
+
+        get_git_segment(bufnr),
+
+        -- 空间仍然不足时，允许 Neovim 从文件路径位置截断。
+        '%<',
+        get_file_segment(bufnr),
+
         '%=',
-        ' ',
-        '%y [ %c : %l ] < %P > ',
+
+        get_diagnostics(bufnr),
+        get_filetype_segment(bufnr),
+        get_position_segment(),
     })
 end
 
-vim.o.statusline = '%!v:lua.Statusline.active()'
+local function redraw_statusline()
+    vim.cmd('redrawstatus!')
+end
+
+local function setup()
+    set_highlights()
+
+    vim.o.laststatus = 3
+    vim.o.statusline = "%!v:lua.require('plugins.statusline').render()"
+
+    local group = vim.api.nvim_create_augroup('CustomStatusline', { clear = true })
+
+    vim.api.nvim_create_autocmd({
+        'DiagnosticChanged',
+        'BufEnter',
+        'BufWritePost',
+        'ModeChanged',
+        'VimResized',
+    }, {
+        group = group,
+        callback = redraw_statusline,
+    })
+
+    vim.api.nvim_create_autocmd('User', {
+        group = group,
+        pattern = 'GitsignsUpdate',
+        callback = redraw_statusline,
+    })
+
+    vim.api.nvim_create_autocmd('ColorScheme', {
+        group = group,
+        callback = function()
+            set_highlights()
+            redraw_statusline()
+        end,
+    })
+end
+
+-- init.lua 中执行 require('plugins.statusline') 时自动配置。
+setup()
+
+return M

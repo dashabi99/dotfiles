@@ -9,7 +9,7 @@ vim.opt.sidescrolloff = 8
 
 -- ========== 行号设置 ==========
 vim.opt.number = true
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 -- ========== 光标和列设置 ==========
 vim.opt.cursorline = true
