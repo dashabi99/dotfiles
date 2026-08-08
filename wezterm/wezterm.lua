@@ -167,9 +167,11 @@ config.enable_scroll_bar = true
 --config.status_update_interval = 1000
 
 --背景透明度
---config.window_background_opacity = 0.9
---亚力克模糊
---config.macos_window_background_blur = 10
+config.window_background_opacity = 0.7
+--win上的亚力克模糊
+config.win32_system_backdrop = "Acrylic"
+--wayland上的亚力克模糊
+-- config.wayland_window_background_blur = true
 
 -- ============================================================================
 -- 定义多系统都需要的变量,避免重复
@@ -188,7 +190,8 @@ local function platform()
 end
 local os_info = platform()
 if os_info.is_win then
-	config.default_prog = { "pwsh", "-NoLogo" }
+	-- config.default_prog = { "pwsh", "-NoLogo" }
+	config.default_prog = { "nu" }
 	config.leader = { key = "b", mods = "CTRL", timeout_milliseconds = 3000 } -- 设置快捷键前缀
 elseif os_info.is_linux then
 	config.default_prog = { "zsh", "-l" }

@@ -109,10 +109,10 @@ config.default_workspace = "Normal"
 --config.font = wezterm.font("UbuntuMono Nerd Font")
 --config.font = wezterm.font("Consolas")
 
-config.font = wezterm.font_with_fallback({
-	"Ubuntu Mono",
-	"nonicons",
-})
+--config.font = wezterm.font_with_fallback({
+--	"Ubuntu Mono",
+--	"nonicons",
+--})
 --config.font = wezterm.font_with_fallback({
 --    { family = "UbuntuMono Nerd Font", weight = "Regular", scale = 1.15 },
 --	--{ family = "Ioskeley Mono", weight = "Regular" },
@@ -137,8 +137,8 @@ config.font = wezterm.font_with_fallback({
 --}
 
 -- 字体大小和行高
-config.font_size = 15
-config.line_height = 1.2
+config.font_size = 13
+config.line_height = 0.9
 
 -- 窗口初始大小
 config.initial_cols = 120 -- 增加列数
@@ -170,9 +170,12 @@ config.enable_scroll_bar = true
 config.status_update_interval = 1000
 
 --背景透明度
--- config.window_background_opacity = 0.9
---亚力克模糊
--- config.macos_window_background_blur = 10
+config.window_background_opacity = 0.7
+--win上的亚力克模糊
+config.win32_system_backdrop = "Acrylic"
+--wayland上的亚力克模糊
+-- config.wayland_window_background_blur = true
+
 --把自己的壁纸放到这里，设置背景图片
 --config.background = {
 --	{
@@ -629,39 +632,39 @@ config.mouse_bindings = {
 -- ============================================================================
 -- 高亮和搜索配置
 -- ============================================================================
-config.quick_select_patterns = {
-	-- 日志级别
-	"\\b(?i)(ERROR|FATAL|PANIC|CRITICAL)\\b",
-	"\\b(?i)(WARN|WARNING|DEPRECATED)\\b",
-	"\\b(?i)(INFO|NOTICE|DEBUG)\\b",
-	"\\b(?i)(SUCCESS|OK|PASSED)\\b",
-
-	-- 网络
-	"\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b", -- IPv4
-	"https?://[\\w\\d\\.-]+(?:[:\\d+])?(?:/[\\w\\d\\.-_/?%&=]*)?", -- URL
-
-	-- 文件路径
-	"[~/][\\w\\d\\.\\-_/]+\\.(log|txt|conf|cfg|ini|yaml|yml|json|py|js|ts|go|rs)\\b",
-
-	-- 时间戳
-	"\\d{4}-\\d{2}-\\d{2}[T\\s]\\d{2}:\\d{2}:\\d{2}",
-
-	-- Git SHA
-	"\\b[a-f0-9]{7,40}\\b",
-}
+-- config.quick_select_patterns = {
+-- 	-- 日志级别
+-- 	"\\b(?i)(ERROR|FATAL|PANIC|CRITICAL)\\b",
+-- 	"\\b(?i)(WARN|WARNING|DEPRECATED)\\b",
+-- 	"\\b(?i)(INFO|NOTICE|DEBUG)\\b",
+-- 	"\\b(?i)(SUCCESS|OK|PASSED)\\b",
+--
+-- 	-- 网络
+-- 	"\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b", -- IPv4
+-- 	"https?://[\\w\\d\\.-]+(?:[:\\d+])?(?:/[\\w\\d\\.-_/?%&=]*)?", -- URL
+--
+-- 	-- 文件路径
+-- 	"[~/][\\w\\d\\.\\-_/]+\\.(log|txt|conf|cfg|ini|yaml|yml|json|py|js|ts|go|rs)\\b",
+--
+-- 	-- 时间戳
+-- 	"\\d{4}-\\d{2}-\\d{2}[T\\s]\\d{2}:\\d{2}:\\d{2}",
+--
+-- 	-- Git SHA
+-- 	"\\b[a-f0-9]{7,40}\\b",
+-- }
 
 -- ============================================================================
 -- 超链接规则
 -- ============================================================================
-config.hyperlink_rules = {
-	{
-		regex = "\\b\\w+://[\\w.-]+\\S*\\b",
-		format = "$0",
-	},
-	{
-		regex = "\\bfile://\\S*\\b",
-		format = "$0",
-	},
-}
+-- config.hyperlink_rules = {
+-- 	{
+-- 		regex = "\\b\\w+://[\\w.-]+\\S*\\b",
+-- 		format = "$0",
+-- 	},
+-- 	{
+-- 		regex = "\\bfile://\\S*\\b",
+-- 		format = "$0",
+-- 	},
+-- }
 
 return config
