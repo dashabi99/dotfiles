@@ -2,6 +2,17 @@ vim.pack.add({
     { src = 'https://github.com/folke/snacks.nvim' },
 })
 
+-- 第一次要把这个注释掉，让他自己下载dll文件，再把文件移动到这个目录下就行
+local data_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'snacks')
+vim.fn.mkdir(data_dir, 'p')
+local sqlite3_path
+if vim.fn.has('win32') == 1 then
+    sqlite3_path = vim.fs.joinpath(data_dir, 'sqlite3.dll')
+end
+if sqlite3_path and vim.fn.filereadable(sqlite3_path) == 0 then
+    vim.notify('找不到 SQLite DLL：' .. sqlite3_path, vim.log.levels.WARN)
+end
+
 local Snacks = require('snacks')
 Snacks.setup({
     -- 检测大文件，并关闭一些高开销功能
@@ -11,6 +22,10 @@ Snacks.setup({
     input = { enabled = true },
     -- 模糊查找器
     picker = {
+        -- 指定win下的dll库文件路径
+        db = {
+            sqlite3_path = sqlite3_path,
+        },
         enabled = true,
         matcher = { frecency = true, cwd_bonus = true, history_bonus = true },
         formatters = { icon_width = 3 },
