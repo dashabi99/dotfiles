@@ -8,6 +8,8 @@ local keymap = vim.keymap.set
 if vim.fn.has('win32') == 1 then
     if vim.fn.executable('pwsh') == 1 then
         vim.opt.shell = 'pwsh'
+    elseif vim.fn.executable('nu') == 1 then
+        vim.opt.shell = 'nu'
     else
         vim.opt.shell = 'powershell.exe'
     end
