@@ -257,7 +257,8 @@ function M.render()
 end
 
 local function redraw_statusline()
-    vim.cmd('redrawstatus!')
+    -- vim.cmd('redrawstatus!')
+    vim.cmd.redrawstatus()
 end
 
 local function setup()
@@ -272,7 +273,8 @@ local function setup()
         'DiagnosticChanged',
         'BufEnter',
         'BufWritePost',
-        'ModeChanged',
+        -- 对snacks插件有影响，先注释掉
+        -- 'ModeChanged',
         'VimResized',
     }, {
         group = group,
